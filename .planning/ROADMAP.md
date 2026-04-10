@@ -48,9 +48,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — SKILL.md frontmatter, service registry, and process Steps 1–2 (merge detection + first-run setup)
-- [ ] 02-02-PLAN.md — Interactive Q&A flow: service selection, per-service questions, UI companion, optional prompts, confirmation gate (Steps 3–8)
-- [ ] 02-03-PLAN.md — File writing, .env management, root compose/Taskfile management, alias substitution, done summary (Steps 9–13)
+- [x] 02-01-PLAN.md — SKILL.md frontmatter, service registry, and process Steps 1–2 (merge detection + first-run setup)
+- [x] 02-02-PLAN.md — Interactive Q&A flow: service selection, per-service questions, UI companion, optional prompts, confirmation gate (Steps 3–8)
+- [x] 02-03-PLAN.md — File writing, .env management, root compose/Taskfile management, alias substitution, done summary (Steps 9–13)
 
 ### Phase 3: Cross-Runtime Wiring & Distribution
 **Goal**: The skill is installed in both AI runtime discovery paths and the repository has documentation enabling any developer to adopt it
