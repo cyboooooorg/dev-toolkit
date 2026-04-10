@@ -63,7 +63,7 @@ An AI can drop production-ready Docker service configs and Taskfiles into any pr
 
 ## Current State
 
-**Phase 01 complete** — Template library established. All 6 compose fragments, 7 Taskfile templates, and `.env.example` are live in `compose-templates/` and `taskfile-templates/`. Ready for Phase 02: Skill Core.
+**Phase 02 complete** — Core `skills/add-service/SKILL.md` written (542 lines, 14 steps). Interactive AI skill guides configuration Q&A, shows a confirmation gate, then writes Docker Compose and Taskfile configs to `.devtools/`. Merge detection, alias multi-instance, and alias idempotency all implemented. Human UAT pending (3 runtime tests). Ready for Phase 03: cross-runtime wiring & distribution.
 
 ## Evolution
 
@@ -83,4 +83,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-10 — Phase 01 complete*
+*Last updated: 2026-04-10 — Phase 02 complete*
