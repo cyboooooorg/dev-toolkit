@@ -28,12 +28,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. All credentials in Compose templates reference env vars (e.g. `${POSTGRES_PASSWORD}`) — no hardcoded passwords anywhere
   4. Each per-service Taskfile has `up`, `down`, `logs`, `restart` tasks; all Docker Compose `-f` flags use `{{.TASKFILE_DIR}}` for path resolution
   5. A root Taskfile template includes all service Taskfiles via `includes:` with `optional: true`
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: Compose service fragments for all 5 services (with health checks, named volumes, env var credentials)
-- [ ] 01-02: Per-service Taskfile templates and root Taskfile template
-- [ ] 01-03: `.env.example` pattern and credential namespace strategy
+- [ ] 01-01-PLAN.md — Compose service fragments (6 services: Redis, RabbitMQ, PostgreSQL, MySQL/MariaDB, MongoDB, Monitoring) + metadata.json files
+- [ ] 01-02-PLAN.md — Per-service Taskfile templates (6 services) + root Taskfile with optional includes
+- [ ] 01-03-PLAN.md — .env.example credential template + credential compliance sweep
 
 ### Phase 2: Skill Core — Interactive Flow & Merge Logic
 **Goal**: A working `SKILL.md` that guides an AI through port/version/credential questions and writes files safely — never overwriting existing services, fully idempotent on re-run
