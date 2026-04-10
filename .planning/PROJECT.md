@@ -12,7 +12,10 @@ An AI can drop production-ready Docker service configs and Taskfiles into any pr
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Docker Compose service definitions for Redis, RabbitMQ, PostgreSQL, MySQL, MongoDB — Validated in Phase 01: Templates & Credential Foundation
+- [x] Taskfile tasks per service: `up`, `up-ui`, `up-monitoring`, `down`, `logs`, `restart` — Validated in Phase 01: Templates & Credential Foundation
+- [x] Template library with `{{PLACEHOLDER}}` token format for credential substitution — Validated in Phase 01: Templates & Credential Foundation
+- [x] No hardcoded secrets in any template; all credentials via `.env` — Validated in Phase 01: Templates & Credential Foundation
 
 ### Active
 
@@ -20,8 +23,6 @@ An AI can drop production-ready Docker service configs and Taskfiles into any pr
 - [ ] Interactive configuration flow: ask port, version, credentials before writing files
 - [ ] Writes a `.devtools/` directory into the target project with Docker Compose + Taskfile
 - [ ] Per-service Taskfiles (e.g. `redis.yml`, `rabbitmq.yml`) included from a root `Taskfile.yml`
-- [ ] Docker Compose service definitions for Redis, RabbitMQ, PostgreSQL, MySQL, MongoDB
-- [ ] Taskfile tasks per service: `up`, `down`, `logs`, `restart` (and service-specific tasks)
 - [ ] Compatible with both GitHub Copilot CLI skill format and Claude/MCP skill format
 - [ ] If a `.devtools/` directory already exists, merge new service without overwriting existing ones
 - [ ] Skill is self-contained and installable into any project without dependencies
@@ -52,10 +53,17 @@ An AI can drop production-ready Docker service configs and Taskfiles into any pr
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| `.devtools/` as output directory | Isolated from project source, easy to gitignore or include selectively | — Pending |
-| Per-service Taskfiles included from root | Modular — adding a service doesn't require editing existing files | — Pending |
-| Interactive config before writing | Avoids wrong defaults baked in; user owns their config from the start | — Pending |
-| Support both Copilot CLI and Claude/MCP | Maximize portability across AI tools | — Pending |
+| `.devtools/` as output directory | Isolated from project source, easy to gitignore or include selectively | Confirmed Phase 01 |
+| Per-service Taskfiles included from root | Modular — adding a service doesn't require editing existing files | Confirmed Phase 01 |
+| `{{PLACEHOLDER}}` token format | Simple, unambiguous substitution; no shell expansion collisions | Confirmed Phase 01 |
+| Three-tier Docker networks (per-service / _services / _monitoring) | Isolation + cross-service reach without exposing internals | Confirmed Phase 01 |
+| Plain volume key names (no `${VAR}` in keys) | Docker Compose v2 does not support variable expansion in volume key names | Confirmed Phase 01 |
+| Interactive config before writing | Avoids wrong defaults baked in; user owns their config from the start | — Pending Phase 02 |
+| Support both Copilot CLI and Claude/MCP | Maximize portability across AI tools | — Pending Phase 02 |
+
+## Current State
+
+**Phase 01 complete** — Template library established. All 6 compose fragments, 7 Taskfile templates, and `.env.example` are live in `compose-templates/` and `taskfile-templates/`. Ready for Phase 02: Skill Core.
 
 ## Evolution
 
@@ -75,4 +83,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-10 after initialization*
+*Last updated: 2026-04-10 — Phase 01 complete*
