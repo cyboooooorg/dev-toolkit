@@ -70,11 +70,28 @@
 
 ## Traceability
 
-| REQ-ID | Phase | Notes |
-|--------|-------|-------|
-| SKILL-01, SKILL-02, SKILL-03 | Phase 3 | Depends on templates being locked |
-| TMPL-01–TMPL-08 | Phase 1 | Core deliverable |
-| CONF-01–CONF-03 | Phase 2 | Embedded in SKILL.md flow logic |
-| CRED-01–CRED-03 | Phase 1 (template) + Phase 2 (flow) | Template defines structure; flow asks the questions |
-| MERGE-01–MERGE-04 | Phase 2 | Merge logic in SKILL.md |
-| DIST-01–DIST-02 | Phase 3 | Wiring + README |
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| TMPL-01 | Phase 1 — Templates & Credential Foundation | Pending |
+| TMPL-02 | Phase 1 — Templates & Credential Foundation | Pending |
+| TMPL-03 | Phase 1 — Templates & Credential Foundation | Pending |
+| TMPL-04 | Phase 1 — Templates & Credential Foundation | Pending |
+| TMPL-05 | Phase 1 — Templates & Credential Foundation | Pending |
+| TMPL-06 | Phase 1 — Templates & Credential Foundation | Pending |
+| TMPL-07 | Phase 1 — Templates & Credential Foundation | Pending |
+| TMPL-08 | Phase 1 — Templates & Credential Foundation | Pending |
+| CRED-01 | Phase 1 — Templates & Credential Foundation | Pending |
+| CRED-02 | Phase 1 — Templates & Credential Foundation | Pending |
+| CRED-03 | Phase 1 — Templates & Credential Foundation | Pending |
+| CONF-01 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
+| CONF-02 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
+| CONF-03 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
+| MERGE-01 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
+| MERGE-02 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
+| MERGE-03 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
+| MERGE-04 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
+| SKILL-01 | Phase 3 — Cross-Runtime Wiring & Distribution | Pending |
+| SKILL-02 | Phase 3 — Cross-Runtime Wiring & Distribution | Pending |
+| SKILL-03 | Phase 3 — Cross-Runtime Wiring & Distribution | Pending |
+| DIST-01 | Phase 3 — Cross-Runtime Wiring & Distribution | Pending |
+| DIST-02 | Phase 3 — Cross-Runtime Wiring & Distribution | Pending |
