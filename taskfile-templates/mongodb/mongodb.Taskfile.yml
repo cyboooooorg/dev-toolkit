@@ -1,0 +1,38 @@
+# MongoDB Taskfile template
+# Installed to: .devtools/mongodb.Taskfile.yml
+# Included by: .devtools/Taskfile.yml as namespace 'mongodb'
+# Usage: task mongodb:up | task mongodb:down | task mongodb:logs | task mongodb:restart
+
+version: '3'
+
+tasks:
+
+  up:
+    desc: Start MongoDB (requires COMPOSE_PROFILES=services in .devtools/.env)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/mongodb.compose.yml up -d
+
+  up-ui:
+    desc: Start MongoDB + Mongo Express UI on MONGODB_UI_PORT (adds ui profile)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/mongodb.compose.yml --profile ui up -d
+
+  up-monitoring:
+    desc: Start MongoDB + mongodb_exporter (adds monitoring profile)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/mongodb.compose.yml --profile monitoring up -d
+
+  down:
+    desc: Stop MongoDB and all its companions
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/mongodb.compose.yml down
+
+  logs:
+    desc: Follow MongoDB container logs
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/mongodb.compose.yml logs -f mongodb
+
+  restart:
+    desc: Restart MongoDB container
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/mongodb.compose.yml restart mongodb

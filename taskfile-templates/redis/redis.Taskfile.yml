@@ -1,0 +1,39 @@
+# Redis Taskfile template
+# Installed to: .devtools/redis.Taskfile.yml
+# Included by: .devtools/Taskfile.yml as namespace 'redis'
+# Usage: task redis:up | task redis:down | task redis:logs | task redis:restart
+# {{.TASKFILE_DIR}} resolves to .devtools/ when installed — same dir as redis.compose.yml
+
+version: '3'
+
+tasks:
+
+  up:
+    desc: Start Redis (main service — requires COMPOSE_PROFILES=services in .devtools/.env)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml up -d
+
+  up-ui:
+    desc: Start Redis + RedisInsight UI (adds ui profile)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml --profile ui up -d
+
+  up-monitoring:
+    desc: Start Redis + metrics exporter (adds monitoring profile)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml --profile monitoring up -d
+
+  down:
+    desc: Stop Redis and all its companions
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml down
+
+  logs:
+    desc: Follow Redis container logs
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml logs -f redis
+
+  restart:
+    desc: Restart Redis container
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml restart redis

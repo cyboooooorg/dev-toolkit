@@ -1,0 +1,90 @@
+# Root Taskfile template
+# Installed to: .devtools/Taskfile.yml
+# Add to your project root Taskfile.yml:
+#   includes:
+#     devtools:
+#       taskfile: ./.devtools/Taskfile.yml
+#       optional: true
+# Then access services as: task devtools:redis:up
+
+version: '3'
+
+includes:
+  redis:
+    taskfile: ./redis.Taskfile.yml
+    optional: true    # Silently ignored if Redis is not installed
+  rabbitmq:
+    taskfile: ./rabbitmq.Taskfile.yml
+    optional: true
+  postgres:
+    taskfile: ./postgres.Taskfile.yml
+    optional: true
+  mysql:
+    taskfile: ./mysql.Taskfile.yml
+    optional: true
+  mongodb:
+    taskfile: ./mongodb.Taskfile.yml
+    optional: true
+  monitoring:
+    taskfile: ./monitoring.Taskfile.yml
+    optional: true
+
+tasks:
+
+  up:
+    desc: Start all installed services (skips services not yet installed)
+    cmds:
+      - task: redis:up
+        ignore_error: true
+      - task: rabbitmq:up
+        ignore_error: true
+      - task: postgres:up
+        ignore_error: true
+      - task: mysql:up
+        ignore_error: true
+      - task: mongodb:up
+        ignore_error: true
+
+  down:
+    desc: Stop all installed services
+    cmds:
+      - task: redis:down
+        ignore_error: true
+      - task: rabbitmq:down
+        ignore_error: true
+      - task: postgres:down
+        ignore_error: true
+      - task: mysql:down
+        ignore_error: true
+      - task: mongodb:down
+        ignore_error: true
+
+  up-ui:
+    desc: Start all installed services with their UI companions
+    cmds:
+      - task: redis:up-ui
+        ignore_error: true
+      - task: rabbitmq:up-ui
+        ignore_error: true
+      - task: postgres:up-ui
+        ignore_error: true
+      - task: mysql:up-ui
+        ignore_error: true
+      - task: mongodb:up-ui
+        ignore_error: true
+
+  up-monitoring:
+    desc: Start all installed services with their metrics exporters + central monitoring stack
+    cmds:
+      - task: redis:up-monitoring
+        ignore_error: true
+      - task: rabbitmq:up-monitoring
+        ignore_error: true
+      - task: postgres:up-monitoring
+        ignore_error: true
+      - task: mysql:up-monitoring
+        ignore_error: true
+      - task: mongodb:up-monitoring
+        ignore_error: true
+      - task: monitoring:up
+        ignore_error: true

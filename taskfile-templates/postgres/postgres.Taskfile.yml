@@ -1,0 +1,38 @@
+# PostgreSQL Taskfile template
+# Installed to: .devtools/postgres.Taskfile.yml
+# Included by: .devtools/Taskfile.yml as namespace 'postgres'
+# Usage: task postgres:up | task postgres:down | task postgres:logs | task postgres:restart
+
+version: '3'
+
+tasks:
+
+  up:
+    desc: Start PostgreSQL (requires COMPOSE_PROFILES=services in .devtools/.env)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml up -d
+
+  up-ui:
+    desc: Start PostgreSQL + pgAdmin UI on POSTGRES_UI_PORT (adds ui profile)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml --profile ui up -d
+
+  up-monitoring:
+    desc: Start PostgreSQL + postgres_exporter (adds monitoring profile)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml --profile monitoring up -d
+
+  down:
+    desc: Stop PostgreSQL and all its companions
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml down
+
+  logs:
+    desc: Follow PostgreSQL container logs
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml logs -f postgres
+
+  restart:
+    desc: Restart PostgreSQL container
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml restart postgres

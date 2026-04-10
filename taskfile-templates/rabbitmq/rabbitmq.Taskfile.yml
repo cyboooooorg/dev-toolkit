@@ -1,0 +1,40 @@
+# RabbitMQ Taskfile template
+# Installed to: .devtools/rabbitmq.Taskfile.yml
+# Included by: .devtools/Taskfile.yml as namespace 'rabbitmq'
+# Usage: task rabbitmq:up | task rabbitmq:down | task rabbitmq:logs | task rabbitmq:restart
+# Management UI is always-on (bundled in management image) — no separate up-ui needed
+# but up-ui is included for consistency; it activates the ui profile (no-op for RabbitMQ)
+
+version: '3'
+
+tasks:
+
+  up:
+    desc: Start RabbitMQ with management UI on RABBITMQ_UI_PORT (requires COMPOSE_PROFILES=services in .env)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml up -d
+
+  up-ui:
+    desc: Start RabbitMQ (management UI is bundled — this is equivalent to up)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml up -d
+
+  up-monitoring:
+    desc: Start RabbitMQ + metrics exporter (adds monitoring profile)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml --profile monitoring up -d
+
+  down:
+    desc: Stop RabbitMQ and all its companions
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml down
+
+  logs:
+    desc: Follow RabbitMQ container logs
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml logs -f rabbitmq
+
+  restart:
+    desc: Restart RabbitMQ container
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml restart rabbitmq

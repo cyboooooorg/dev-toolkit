@@ -1,0 +1,39 @@
+# MySQL / MariaDB Taskfile template
+# Installed to: .devtools/mysql.Taskfile.yml
+# Included by: .devtools/Taskfile.yml as namespace 'mysql'
+# Usage: task mysql:up | task mysql:down | task mysql:logs | task mysql:restart
+# Works for both mariadb:11 (default) and mysql:8 (opt-in) — same service name 'mysql'
+
+version: '3'
+
+tasks:
+
+  up:
+    desc: Start MySQL/MariaDB (requires COMPOSE_PROFILES=services in .devtools/.env)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/mysql.compose.yml up -d
+
+  up-ui:
+    desc: Start MySQL/MariaDB + phpMyAdmin UI on MYSQL_UI_PORT (adds ui profile)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/mysql.compose.yml --profile ui up -d
+
+  up-monitoring:
+    desc: Start MySQL/MariaDB + mysqld_exporter (adds monitoring profile)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/mysql.compose.yml --profile monitoring up -d
+
+  down:
+    desc: Stop MySQL/MariaDB and all its companions
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/mysql.compose.yml down
+
+  logs:
+    desc: Follow MySQL/MariaDB container logs
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/mysql.compose.yml logs -f mysql
+
+  restart:
+    desc: Restart MySQL/MariaDB container
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/mysql.compose.yml restart mysql

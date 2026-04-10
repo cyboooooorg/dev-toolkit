@@ -1,0 +1,34 @@
+# Monitoring Taskfile template (Prometheus + Grafana)
+# Installed to: .devtools/monitoring.Taskfile.yml
+# Included by: .devtools/Taskfile.yml as namespace 'monitoring'
+# Usage: task monitoring:up | task monitoring:down | task monitoring:logs
+# Note: monitoring profile must be active — this task passes --profile monitoring explicitly
+
+version: '3'
+
+tasks:
+
+  up:
+    desc: Start Prometheus + Grafana monitoring stack
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/monitoring.compose.yml --profile monitoring up -d
+
+  down:
+    desc: Stop Prometheus + Grafana
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/monitoring.compose.yml down
+
+  logs:
+    desc: Follow Prometheus logs (use monitoring:logs-grafana for Grafana)
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/monitoring.compose.yml logs -f prometheus
+
+  logs-grafana:
+    desc: Follow Grafana logs
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/monitoring.compose.yml logs -f grafana
+
+  restart:
+    desc: Restart Prometheus and Grafana containers
+    cmds:
+      - docker compose -f {{.TASKFILE_DIR}}/monitoring.compose.yml restart prometheus grafana
