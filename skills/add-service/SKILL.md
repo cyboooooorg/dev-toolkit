@@ -262,3 +262,181 @@ Ask: `"Write these files? [Y/n]"`
 - If **Yes** → continue to **Step 9**.
 
 **Do NOT write any files before this confirmation.** Steps 9–13 perform all writes.
+
+## Step 9: Write Per-Service Files
+
+User confirmed "Yes" at Step 8. Proceed with file writes.
+
+### 9a: Write Compose File
+
+Read the compose template from the skill repo:
+```
+compose-templates/${SERVICE}/${SERVICE}.compose.yml
+```
+
+**For standard install (`MODE=standard`):** Copy the file content verbatim.
+
+**Special case — Redis, no password:** If `SERVICE=redis` and `ANSWERS[password]` is empty
+string (user pressed enter to skip), after loading the template content:
+- Remove the `--requirepass ${REDIS_PASSWORD}` argument from the `command:` line.
+- Remove `-a "${REDIS_PASSWORD}"` from the `healthcheck.test` command.
+Write the modified content (not the raw template) to `.devtools/redis.compose.yml`.
+
+**For alias install (`MODE=alias`):** Before writing, perform all string substitutions in the
+file content — see **Step 12** for the complete substitution map. Apply substitutions to the
+in-memory copy before writing. Do NOT modify the original template file.
+
+Write to the target project:
+```
+.devtools/<filename>.compose.yml
+```
+Where `<filename>` is `${SERVICE}` for standard, or `${SERVICE_SLUG}` for alias
+(e.g. `redis-cache`).
+
+### 9b: Write Taskfile (if ANSWERS[taskfile]=true)
+
+Read the per-service Taskfile template from the skill repo:
+```
+taskfile-templates/${SERVICE}/${SERVICE}.Taskfile.yml
+```
+
+**For alias install:** Perform string substitutions (see Step 12) on the in-memory copy.
+
+Write to the target project:
+```
+.devtools/<filename>.Taskfile.yml
+```
+Where `<filename>` is `${SERVICE}` for standard, or `${SERVICE_SLUG}` for alias.
+
+**Note:** Always write the per-service file (Step 9) BEFORE updating `compose.yml` (Step 11).
+This ensures `compose.yml` never references a file that failed to write.
+
+## Step 10: .env Management
+
+### 10a: Write .devtools/.env
+
+Append a section block to `.devtools/.env` (create the file if it does not exist):
+
+```
+# ── <SERVICE> ───────────────────────────────────────
+<ENV_VAR_NAME>=<value>
+...
+```
+
+For **standard** install — env var names from metadata `env_var` field:
+
+| Service | Env vars to append |
+|---------|-------------------|
+| redis | REDIS_PORT, REDIS_VERSION, REDIS_PASSWORD (empty string if skipped) |
+| rabbitmq | RABBITMQ_PORT, RABBITMQ_VERSION, RABBITMQ_USERNAME, RABBITMQ_PASSWORD, RABBITMQ_UI_PORT |
+| postgres | POSTGRES_PORT, POSTGRES_VERSION, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_UI_PORT (if UI enabled), PGADMIN_DEFAULT_EMAIL (if UI enabled), PGADMIN_DEFAULT_PASSWORD (if UI enabled) |
+| mysql | MYSQL_PORT, MYSQL_VERSION, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE, MYSQL_ROOT_PASSWORD, MYSQL_UI_PORT (if UI enabled) |
+| mongodb | MONGODB_PORT, MONGODB_VERSION, MONGO_INITDB_ROOT_USERNAME, MONGO_INITDB_ROOT_PASSWORD, MONGODB_UI_PORT (if UI enabled), MONGO_EXPRESS_BASICAUTH (if UI enabled: `true` if auth, `false` if not), MONGO_EXPRESS_USER (if UI auth), MONGO_EXPRESS_PASSWORD (if UI auth) |
+
+For **alias** install — prefix all env var names with `ENV_PREFIX_`:
+e.g. `REDIS_CACHE_PORT`, `REDIS_CACHE_VERSION`, `REDIS_CACHE_PASSWORD`, etc.
+
+**Conflict detection (D-13):** Before appending each key, check if the key already exists
+in `.devtools/.env`. If it does:
+- Mark the old line: append ` ## REPLACED` as an inline comment on that line.
+- Append the new value on the next line.
+- Record the conflict in a warnings list for the done summary.
+
+If `COMPOSE_PROJECT_NAME` is not yet in `.devtools/.env`, prepend it as the very first entry:
+```
+COMPOSE_PROJECT_NAME=<value>
+```
+
+### 10b: Write .devtools/.env.example
+
+Append the same keys to `.devtools/.env.example` (create if not exists) with **dummy/placeholder
+values only** — never real credentials:
+
+```
+# ── <SERVICE> ───────────────────────────────────────
+REDIS_PORT=6379
+REDIS_VERSION=7
+REDIS_PASSWORD=CHANGE_ME
+REDIS_UI_PORT=8001
+```
+
+Use obvious placeholder strings for credentials: `CHANGE_ME`, `admin@example.com`, etc.
+
+### 10c: Monitoring .env (if ANSWERS[monitoring]=true)
+
+Append to `.devtools/.env`:
+```
+# ── Monitoring ──────────────────────────────────────
+GRAFANA_ADMIN_USER=admin
+GRAFANA_ADMIN_PASSWORD=<ANSWERS[grafana_password]>
+```
+
+Apply conflict detection (D-13) for `GRAFANA_ADMIN_USER` and `GRAFANA_ADMIN_PASSWORD`.
+
+Append to `.devtools/.env.example` (dummy values only):
+```
+# ── Monitoring ──────────────────────────────────────
+GRAFANA_ADMIN_USER=admin
+GRAFANA_ADMIN_PASSWORD=CHANGE_ME
+```
+
+### 10d: Monitoring files (if ANSWERS[monitoring]=true)
+
+Copy monitoring templates verbatim (no token substitution needed):
+
+1. Read `compose-templates/monitoring/monitoring.compose.yml` from the skill repo.
+   Write to `.devtools/monitoring.compose.yml` in the target project.
+
+2. If `ANSWERS[taskfile]=true`, read `taskfile-templates/monitoring/monitoring.Taskfile.yml`
+   from the skill repo. Write to `.devtools/monitoring.Taskfile.yml` in the target project.
+
+3. After writing `monitoring.compose.yml` (step 1 above), update `.devtools/compose.yml`
+   to add the monitoring include (using the same create-or-append logic as Step 11a):
+   ```yaml
+     - ./monitoring.compose.yml
+   ```
+
+**Important:** Write `monitoring.compose.yml` before updating `compose.yml` include —
+same write-order rule as Step 9 (Pitfall 6).
+
+## Step 11: Root File Management
+
+### 11a: Root Compose File (.devtools/compose.yml)
+
+Check if `.devtools/compose.yml` exists:
+
+**If it does NOT exist (first service install):**
+Create `.devtools/compose.yml` with this content:
+```yaml
+# .devtools/compose.yml
+# Root compose aggregator — managed by dev-tools skill
+# Do not edit manually; run the skill to add or remove services.
+
+include:
+  - ./<filename>.compose.yml
+```
+Where `<filename>` is `${SERVICE}` (standard) or `${SERVICE_SLUG}` (alias).
+
+**If it DOES exist (subsequent service install):**
+Read the file, locate the `include:` block, and append a new line:
+```yaml
+  - ./<filename>.compose.yml
+```
+Do NOT rewrite the entire file — only add the new entry.
+
+### 11b: Root Taskfile (.devtools/Taskfile.yml)
+
+Check if `.devtools/Taskfile.yml` exists:
+```bash
+test -f .devtools/Taskfile.yml
+```
+
+**If it does NOT exist:** Copy `taskfile-templates/root/Taskfile.yml` verbatim to
+`.devtools/Taskfile.yml`.
+
+**If it DOES exist:** Do NOT overwrite it. The root Taskfile template already contains
+`optional: true` for all 6 service includes — missing service files are silently skipped
+at runtime. No append is needed.
+
+**Important:** Never overwrite an existing `.devtools/Taskfile.yml`. Users may have
+customized it. The `optional: true` pattern makes per-install updates unnecessary.
