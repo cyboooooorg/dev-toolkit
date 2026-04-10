@@ -1,0 +1,60 @@
+# RabbitMQ service template
+# Installed to: .devtools/rabbitmq.compose.yml
+# Profiles: services (default), monitoring (opt-in)
+# Management UI (port 15672) is bundled in the management image variant — always-on.
+# Credentials: all via env_file .env — never hardcoded here
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:${RABBITMQ_VERSION}-management-alpine
+    profiles:
+      - services
+    container_name: ${COMPOSE_PROJECT_NAME:-devtools}-rabbitmq
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:${RABBITMQ_PORT}:5672"
+      - "127.0.0.1:${RABBITMQ_UI_PORT}:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - rabbitmq_net
+      - services
+    restart: unless-stopped
+
+  rabbitmq_exporter:
+    image: kbudde/rabbitmq-exporter:latest
+    profiles:
+      - monitoring
+    container_name: ${COMPOSE_PROJECT_NAME:-devtools}-rabbitmq-exporter
+    environment:
+      RABBIT_URL: "http://rabbitmq:15672"
+      RABBIT_USER: ${RABBITMQ_USERNAME}
+      RABBIT_PASSWORD: ${RABBITMQ_PASSWORD}
+    # No volumes — ephemeral by design
+    networks:
+      - rabbitmq_net
+      - monitoring
+    restart: unless-stopped
+
+volumes:
+  rabbitmq_data:
+    # Plain name — Docker auto-prefixes with COMPOSE_PROJECT_NAME at runtime
+
+networks:
+  rabbitmq_net:
+    name: ${COMPOSE_PROJECT_NAME:-devtools}_rabbitmq
+  services:
+    name: ${COMPOSE_PROJECT_NAME:-devtools}_services
+  monitoring:
+    name: ${COMPOSE_PROJECT_NAME:-devtools}_monitoring

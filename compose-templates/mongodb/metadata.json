@@ -1,0 +1,19 @@
+{
+  "service": "mongodb",
+  "description": "MongoDB document database",
+  "parameters": [
+    { "name": "port",      "default": 27017, "env_var": "MONGODB_PORT",                "token": "{{PORT}}"     },
+    { "name": "version",   "default": "7",   "env_var": "MONGODB_VERSION",             "token": "{{VERSION}}"  },
+    { "name": "username",  "default": "admin","env_var": "MONGO_INITDB_ROOT_USERNAME",  "token": "{{USERNAME}}" },
+    { "name": "password",  "default": null,  "env_var": "MONGO_INITDB_ROOT_PASSWORD",  "token": "{{PASSWORD}}" },
+    { "name": "ui_port",   "default": 8081,  "env_var": "MONGODB_UI_PORT",             "token": "{{UI_PORT}}"  }
+  ],
+  "ui_companion": {
+    "image": "mongo-express:latest",
+    "host_port": 8081,
+    "container_port": 8081
+  },
+  "exporter": {
+    "image": "percona/mongodb_exporter:latest"
+  }
+}

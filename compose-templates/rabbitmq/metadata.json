@@ -1,0 +1,19 @@
+{
+  "service": "rabbitmq",
+  "description": "RabbitMQ message broker with management UI",
+  "parameters": [
+    { "name": "port",      "default": 5672,   "env_var": "RABBITMQ_PORT",     "token": "{{PORT}}"     },
+    { "name": "ui_port",   "default": 15672,  "env_var": "RABBITMQ_UI_PORT",  "token": "{{UI_PORT}}"  },
+    { "name": "version",   "default": "3",    "env_var": "RABBITMQ_VERSION",  "token": "{{VERSION}}"  },
+    { "name": "username",  "default": "admin","env_var": "RABBITMQ_USERNAME", "token": "{{USERNAME}}" },
+    { "name": "password",  "default": null,   "env_var": "RABBITMQ_PASSWORD", "token": "{{PASSWORD}}" }
+  ],
+  "ui_companion": {
+    "note": "Management UI is bundled in rabbitmq:*-management image — always active on RABBITMQ_UI_PORT",
+    "host_port": 15672,
+    "container_port": 15672
+  },
+  "exporter": {
+    "image": "kbudde/rabbitmq-exporter:latest"
+  }
+}

@@ -1,0 +1,36 @@
+# Monitoring stack template (Prometheus + Grafana)
+# Installed to: .devtools/monitoring.compose.yml
+# Profiles: monitoring (opt-in only — both containers require --profile monitoring)
+# Ephemeral: no named volumes — data is session-scoped
+# Note: Per-service metrics exporters live in each service's compose file.
+# Note: Prometheus scrape_configs are injected by the skill at install time (Phase 2).
+
+services:
+
+  prometheus:
+    image: prom/prometheus:latest
+    profiles:
+      - monitoring
+    container_name: ${COMPOSE_PROJECT_NAME:-devtools}-prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+    # No volumes — ephemeral by design (scrape config injected at install time)
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    profiles:
+      - monitoring
+    container_name: ${COMPOSE_PROJECT_NAME:-devtools}-grafana
+    ports:
+      - "127.0.0.1:3001:3000"
+    # No volumes — ephemeral by design
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+networks:
+  monitoring:
+    name: ${COMPOSE_PROJECT_NAME:-devtools}_monitoring

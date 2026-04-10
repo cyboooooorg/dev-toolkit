@@ -1,0 +1,82 @@
+# MySQL / MariaDB service template
+# Installed to: .devtools/mysql.compose.yml
+# Profiles: services (default), ui (opt-in), monitoring (opt-in)
+# Default image: mariadb:11 (ARM-native, no emulation required)
+# Opt-in MySQL 8: see comment on image line below
+# Credentials: all via env_file .env — never hardcoded here
+
+services:
+
+  mysql:
+    # Default: MariaDB (ARM64-native, MySQL-compatible)
+    image: mariadb:${MYSQL_VERSION}
+    # Opt-in MySQL 8: Replace the image line above with the line below.
+    # NOTE: mysql:8 may require 'platform: linux/amd64' on Apple Silicon (ARM64).
+    # image: mysql:8
+    profiles:
+      - services
+    container_name: ${COMPOSE_PROJECT_NAME:-devtools}-mysql
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:${MYSQL_PORT}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    healthcheck:
+      # MariaDB: uses built-in healthcheck.sh script
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      # MySQL 8: Replace test line above with:
+      # test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - mysql_net
+      - services
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    profiles:
+      - ui
+    container_name: ${COMPOSE_PROJECT_NAME:-devtools}-phpmyadmin
+    ports:
+      - "127.0.0.1:${MYSQL_UI_PORT}:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: "3306"
+    # No volumes — ephemeral by design
+    networks:
+      - mysql_net
+    restart: unless-stopped
+
+  mysql_exporter:
+    image: prom/mysqld-exporter:latest
+    profiles:
+      - monitoring
+    container_name: ${COMPOSE_PROJECT_NAME:-devtools}-mysql-exporter
+    environment:
+      DATA_SOURCE_NAME: "${MYSQL_USER}:${MYSQL_PASSWORD}@(mysql:3306)/"
+    # No volumes — ephemeral by design
+    networks:
+      - mysql_net
+      - monitoring
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+    # Plain name — Docker auto-prefixes with COMPOSE_PROJECT_NAME at runtime
+
+networks:
+  mysql_net:
+    name: ${COMPOSE_PROJECT_NAME:-devtools}_mysql
+  services:
+    name: ${COMPOSE_PROJECT_NAME:-devtools}_services
+  monitoring:
+    name: ${COMPOSE_PROJECT_NAME:-devtools}_monitoring

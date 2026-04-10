@@ -1,0 +1,22 @@
+{
+  "service": "postgres",
+  "description": "PostgreSQL relational database",
+  "parameters": [
+    { "name": "port",              "default": 5432,        "env_var": "POSTGRES_PORT",           "token": "{{PORT}}"     },
+    { "name": "version",           "default": "16",        "env_var": "POSTGRES_VERSION",        "token": "{{VERSION}}"  },
+    { "name": "username",          "default": "postgres",  "env_var": "POSTGRES_USER",           "token": "{{USERNAME}}" },
+    { "name": "password",          "default": null,        "env_var": "POSTGRES_PASSWORD",       "token": "{{PASSWORD}}" },
+    { "name": "database",          "default": "app",       "env_var": "POSTGRES_DB",             "token": "{{DB_NAME}}"  },
+    { "name": "ui_port",           "default": 8085,        "env_var": "POSTGRES_UI_PORT",        "token": "{{UI_PORT}}"  },
+    { "name": "pgadmin_email",     "default": "admin@local.dev", "env_var": "PGADMIN_DEFAULT_EMAIL",    "token": null   },
+    { "name": "pgadmin_password",  "default": null,        "env_var": "PGADMIN_DEFAULT_PASSWORD", "token": null          }
+  ],
+  "ui_companion": {
+    "image": "dpage/pgadmin4:latest",
+    "host_port": 8085,
+    "container_port": 80
+  },
+  "exporter": {
+    "image": "prometheuscommunity/postgres-exporter:latest"
+  }
+}

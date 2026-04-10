@@ -1,0 +1,12 @@
+{
+  "service": "monitoring",
+  "description": "Central monitoring stack: Prometheus metrics collection + Grafana dashboards",
+  "note": "Per-service exporters are declared in each service's compose file under the monitoring profile. This template adds the central Prometheus and Grafana containers.",
+  "parameters": [],
+  "containers": [
+    { "name": "prometheus", "image": "prom/prometheus:latest",  "port": 9090 },
+    { "name": "grafana",    "image": "grafana/grafana:latest",   "port": 3001 }
+  ],
+  "ui_companion": null,
+  "exporter": null
+}

@@ -1,0 +1,18 @@
+{
+  "service": "redis",
+  "description": "Redis in-memory key-value store",
+  "parameters": [
+    { "name": "port",     "default": 6379,  "env_var": "REDIS_PORT",     "token": "{{PORT}}"     },
+    { "name": "version",  "default": "7",   "env_var": "REDIS_VERSION",  "token": "{{VERSION}}"  },
+    { "name": "password", "default": null,  "env_var": "REDIS_PASSWORD", "token": "{{PASSWORD}}" },
+    { "name": "ui_port",  "default": 8001,  "env_var": "REDIS_UI_PORT",  "token": "{{UI_PORT}}"  }
+  ],
+  "ui_companion": {
+    "image": "redis/redisinsight:latest",
+    "host_port": 8001,
+    "container_port": 8001
+  },
+  "exporter": {
+    "image": "oliver006/redis_exporter:latest"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "service": "mysql",
+  "description": "MySQL-compatible database (MariaDB 11 default; MySQL 8 opt-in)",
+  "default_variant": "mariadb",
+  "variants": {
+    "mariadb": { "image": "mariadb", "default_version": "11", "arm64_native": true },
+    "mysql":   { "image": "mysql",   "default_version": "8",  "arm64_native": false, "arm64_warning": "mysql:8 may require platform: linux/amd64 on Apple Silicon" }
+  },
+  "parameters": [
+    { "name": "port",           "default": 3306,  "env_var": "MYSQL_PORT",          "token": "{{PORT}}"     },
+    { "name": "version",        "default": "11",  "env_var": "MYSQL_VERSION",       "token": "{{VERSION}}"  },
+    { "name": "username",       "default": "app", "env_var": "MYSQL_USER",          "token": "{{USERNAME}}" },
+    { "name": "password",       "default": null,  "env_var": "MYSQL_PASSWORD",      "token": "{{PASSWORD}}" },
+    { "name": "database",       "default": "app", "env_var": "MYSQL_DATABASE",      "token": "{{DB_NAME}}"  },
+    { "name": "root_password",  "default": null,  "env_var": "MYSQL_ROOT_PASSWORD", "token": null           },
+    { "name": "ui_port",        "default": 8080,  "env_var": "MYSQL_UI_PORT",       "token": "{{UI_PORT}}"  }
+  ],
+  "ui_companion": {
+    "image": "phpmyadmin:latest",
+    "host_port": 8080,
+    "container_port": 80
+  },
+  "exporter": {
+    "image": "prom/mysqld-exporter:latest"
+  }
+}
