@@ -58,6 +58,8 @@ tasks:
         ignore_error: true
       - task: mongodb:down
         ignore_error: true
+      - task: monitoring:down
+        ignore_error: true
 
   up-ui:
     desc: Start all installed services with their UI companions
