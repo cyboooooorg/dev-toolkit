@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-04-10)
 
 Phase: 1 of 3 (Templates & Credential Foundation)
 Plan: 0 of 3 in current phase
-Status: Ready to plan
-Last activity: 2026-04-10 — Roadmap created, ready to begin Phase 1 planning
+Status: Ready to plan (discussion complete)
+Last activity: 2026-04-10 — Phase 1 discussion complete, CONTEXT.md written
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -53,7 +53,7 @@ None yet.
 ### Blockers/Concerns
 
 - **Phase 2 design note:** Skill description precision (the frontmatter text that triggers the skill) cannot be validated until written and tested against real prompts. Plan for a description-tuning iteration during Phase 2.
-- **Phase 1 open question:** MySQL ARM64 (Apple Silicon) compatibility — `mysql:latest` has inconsistent ARM support. Template should use `mysql:8` with a `platform: linux/amd64` note or recommend `mariadb`. Resolve during Phase 1 template authoring.
+- **Phase 1 resolved:** MySQL/ARM64 → default to `mariadb:11`; offer `mysql:8` opt-in with ARM warning comment.
 
 ## Session Continuity
 
