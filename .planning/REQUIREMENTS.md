@@ -27,9 +27,9 @@
 
 ### Credentials Handling (CRED)
 
-- [ ] **CRED-01**: Credentials are written to `.devtools/.env`, never hardcoded into `docker-compose.yml`
-- [ ] **CRED-02**: Generated `docker-compose.yml` references credentials via `env_file: .env` (relative to `.devtools/`)
-- [ ] **CRED-03**: `.devtools/.env` is appended to (not overwritten) when additional services are added; per-service variable names are namespaced (e.g. `POSTGRES_USER`, `REDIS_PORT`)
+- [x] **CRED-01**: Credentials are written to `.devtools/.env`, never hardcoded into `docker-compose.yml`
+- [x] **CRED-02**: Generated `docker-compose.yml` references credentials via `env_file: .env` (relative to `.devtools/`)
+- [x] **CRED-03**: `.devtools/.env` is appended to (not overwritten) when additional services are added; per-service variable names are namespaced (e.g. `POSTGRES_USER`, `REDIS_PORT`)
 
 ### Multi-instance & Idempotency (MERGE)
 
@@ -80,9 +80,9 @@
 | TMPL-06 | Phase 1 — Templates & Credential Foundation | Complete |
 | TMPL-07 | Phase 1 — Templates & Credential Foundation | Complete |
 | TMPL-08 | Phase 1 — Templates & Credential Foundation | Complete |
-| CRED-01 | Phase 1 — Templates & Credential Foundation | Pending |
-| CRED-02 | Phase 1 — Templates & Credential Foundation | Pending |
-| CRED-03 | Phase 1 — Templates & Credential Foundation | Pending |
+| CRED-01 | Phase 1 — Templates & Credential Foundation | Complete |
+| CRED-02 | Phase 1 — Templates & Credential Foundation | Complete |
+| CRED-03 | Phase 1 — Templates & Credential Foundation | Complete |
 | CONF-01 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
 | CONF-02 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
 | CONF-03 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |

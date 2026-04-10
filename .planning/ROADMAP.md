@@ -12,7 +12,7 @@ Three phases build this project in the only order that makes sense: templates fi
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Templates & Credential Foundation** - All 5 service templates (Compose + Taskfile) authored with correct credential patterns
+- [x] **Phase 1: Templates & Credential Foundation** - All 5 service templates (Compose + Taskfile) authored with correct credential patterns (completed 2026-04-10)
 - [ ] **Phase 2: Skill Core — Interactive Flow & Merge Logic** - SKILL.md that guides an AI through interactive config, credential capture, and safe idempotent writes
 - [ ] **Phase 3: Cross-Runtime Wiring & Distribution** - Skill discoverable by both Copilot CLI and Claude/MCP; README documents installation
 
@@ -33,7 +33,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 01-01-PLAN.md — Compose service fragments (6 services: Redis, RabbitMQ, PostgreSQL, MySQL/MariaDB, MongoDB, Monitoring) + metadata.json files
 - [x] 01-02-PLAN.md — Per-service Taskfile templates (6 services) + root Taskfile with optional includes
-- [ ] 01-03-PLAN.md — .env.example credential template + credential compliance sweep
+- [x] 01-03-PLAN.md — .env.example credential template + credential compliance sweep
 
 ### Phase 2: Skill Core — Interactive Flow & Merge Logic
 **Goal**: A working `SKILL.md` that guides an AI through port/version/credential questions and writes files safely — never overwriting existing services, fully idempotent on re-run
@@ -74,6 +74,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Templates & Credential Foundation | 0/3 | Not started | - |
+| 1. Templates & Credential Foundation | 3/3 | Complete   | 2026-04-10 |
 | 2. Skill Core — Interactive Flow & Merge Logic | 0/3 | Not started | - |
 | 3. Cross-Runtime Wiring & Distribution | 0/2 | Not started | - |
