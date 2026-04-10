@@ -43,3 +43,66 @@ alias/multi-instance installs.
 </context>
 
 <process>
+
+## Step 1: Detect Installation State
+
+Determine the service name:
+- If `$ARGUMENTS` is not empty, `SERVICE=$ARGUMENTS` (normalize to lowercase).
+- If `$ARGUMENTS` is empty, skip to **Step 3** to ask the user to select a service.
+
+Check whether the service is already installed:
+```bash
+test -f .devtools/${SERVICE}.compose.yml
+```
+- If the file **does not exist** → continue to **Step 2**.
+- If the file **exists** → go to **Step 1a**.
+
+## Step 1a: Merge Detection
+
+The service is already installed. Inform the user:
+
+> "`${SERVICE}` is already installed in `.devtools/`."
+
+Ask: `"Add another instance with an alias, or cancel? [alias/cancel]"`
+
+- If user answers **cancel** → output `"Nothing written. Exiting."` and stop.
+- If user provides an **alias** (e.g. `cache`, `session`):
+  - Set `ALIAS=<alias>` (lowercase, letters/numbers/hyphens only).
+  - Set `SERVICE_SLUG=${SERVICE}-${ALIAS}` (e.g. `redis-cache`).
+  - Set `SERVICE_SNAKE=${SERVICE}_${ALIAS}` (e.g. `redis_cache`) — used for YAML service keys, volume keys, network keys.
+  - Set `ENV_PREFIX=<SERVICE_UPPER>_<ALIAS_UPPER>` (e.g. `REDIS_CACHE`) — used for env var names.
+  - Check if alias already installed:
+    ```bash
+    test -f .devtools/${SERVICE_SLUG}.compose.yml
+    ```
+  - If file **exists** → output `"${SERVICE_SLUG} is already installed — nothing to do."` and stop. (MERGE-04)
+  - If file **does not exist** → set `MODE=alias` and continue to **Step 3**.
+- No alias set and no existing file → set `MODE=standard` and continue to **Step 2**.
+
+## Step 2: First-Run Setup
+
+**Only run this step if `.devtools/` does not yet exist.**
+
+Check:
+```bash
+test -d .devtools
+```
+- If `.devtools/` **exists** → skip to **Step 3**.
+- If `.devtools/` **does not exist** → proceed:
+
+  1. Announce: `"Creating .devtools/ directory..."`.
+  2. Create the directory:
+     ```bash
+     mkdir -p .devtools
+     ```
+  3. Write `.devtools/.gitignore` with exactly this content (do not add any other entries):
+     ```
+     .env
+     ```
+  4. Ask: `"Project name for Docker namespacing? [default: <derive from git remote or pwd>]"`
+     - Derive the default: run `basename $(git remote get-url origin 2>/dev/null || echo $(pwd)) | sed 's/\.git$//'`
+     - Set `COMPOSE_PROJECT_NAME=<user answer or default>`.
+  5. Continue to **Step 3**.
+
+  If `.devtools/.env` already exists and contains `COMPOSE_PROJECT_NAME`, skip the project
+  name question entirely (D-20).
