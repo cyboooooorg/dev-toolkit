@@ -440,3 +440,103 @@ at runtime. No append is needed.
 
 **Important:** Never overwrite an existing `.devtools/Taskfile.yml`. Users may have
 customized it. The `optional: true` pattern makes per-install updates unnecessary.
+
+## Step 12: Alias Substitution (alias installs only)
+
+**Skip this step entirely for standard installs (`MODE=standard`).**
+
+For alias installs, perform the following string substitutions throughout the compose file
+content (in memory, before writing) and the Taskfile content (in memory, before writing).
+
+Variables set in Step 1a:
+- `SERVICE_SLUG` = `${SERVICE}-${ALIAS}` (e.g. `redis-cache`) — used in filenames and container names
+- `SERVICE_SNAKE` = `${SERVICE}_${ALIAS}` (e.g. `redis_cache`) — used in YAML keys, volumes, networks
+- `ENV_PREFIX` = `<SERVICE_UPPER>_<ALIAS_UPPER>` (e.g. `REDIS_CACHE`) — used in env var names
+
+### Compose file substitutions
+
+| What | Old value (pattern) | New value |
+|------|---------------------|-----------|
+| YAML service key | `${SERVICE}:` | `${SERVICE_SNAKE}:` |
+| Container name suffix | `-${SERVICE}` | `-${SERVICE_SLUG}` |
+| Volume key declaration | `${SERVICE}_data:` | `${SERVICE_SNAKE}_data:` |
+| Volume reference (under volumes:) | `${SERVICE}_data` | `${SERVICE_SNAKE}_data` |
+| Network key declaration | `${SERVICE}_net:` | `${SERVICE_SNAKE}_net:` |
+| Network reference (under networks:) | `${SERVICE}_net` | `${SERVICE_SNAKE}_net` |
+| Env var names in content | `${SERVICE_UPPER}_PORT` | `${ENV_PREFIX}_PORT` |
+| Env var names in content | `${SERVICE_UPPER}_VERSION` | `${ENV_PREFIX}_VERSION` |
+| Env var names in content | `${SERVICE_UPPER}_PASSWORD` | `${ENV_PREFIX}_PASSWORD` |
+| Env var names in content | `${SERVICE_UPPER}_USERNAME` | `${ENV_PREFIX}_USERNAME` |
+| Env var names in content | `${SERVICE_UPPER}_UI_PORT` | `${ENV_PREFIX}_UI_PORT` |
+| Other service-specific env vars | `${SERVICE_UPPER}_*` | `${ENV_PREFIX}_*` |
+
+**Service key note:** YAML service keys must use underscore (`redis_cache:`) — hyphens in
+Compose service names cause network auto-naming issues. Container names and filenames use
+hyphen (`redis-cache`) — that is correct and expected.
+
+### Taskfile substitutions
+
+Replace all references to the compose filename and service name within task commands:
+- `${SERVICE}.compose.yml` → `${SERVICE_SLUG}.compose.yml`
+- `logs -f ${SERVICE}` → `logs -f ${SERVICE_SNAKE}`
+- `restart ${SERVICE}` → `restart ${SERVICE_SNAKE}`
+
+## Step 13: Done Summary
+
+Output a completion summary:
+
+```
+✓ Done! Files written:
+```
+
+List every file actually written (skip files that were skipped):
+```
+  .devtools/.gitignore              (first install)
+  .devtools/redis.compose.yml       (or redis-cache.compose.yml for alias)
+  .devtools/redis.Taskfile.yml      (if Taskfile=yes)
+  .devtools/compose.yml             (created or updated)
+  .devtools/Taskfile.yml            (if first install)
+  .devtools/.env                    (appended)
+  .devtools/.env.example            (appended)
+```
+
+Next steps:
+```
+  Start service:    task redis:up
+  With UI:          task redis:up-ui
+  With monitoring:  task redis:up-monitoring
+  Stop:             task redis:down
+```
+
+If the service was installed with an alias, show the aliased task names:
+```
+  Start service:    task redis-cache:up
+```
+
+If any `## REPLACED` conflicts were found in `.devtools/.env`, add a warning:
+```
+⚠ Warning: The following keys were already present in .devtools/.env and have been replaced:
+  - REDIS_PORT  (old value marked ## REPLACED)
+Review .devtools/.env if this is unexpected.
+```
+
+Always add the reminder:
+```
+⚠ Do not commit .devtools/.env — it contains real credentials.
+   .devtools/.gitignore already excludes it.
+```
+
+</process>
+
+<success_criteria>
+- Service compose file exists at `.devtools/<service>.compose.yml` (or `<service>-<alias>.compose.yml`)
+- Service Taskfile exists at `.devtools/<service>.Taskfile.yml` (if Taskfile=yes)
+- `.devtools/.env` contains all service env vars with real values
+- `.devtools/.env.example` contains all service env var names with dummy/placeholder values
+- `.devtools/.gitignore` exists and contains `.env`
+- `.devtools/compose.yml` exists and includes the new service's compose file
+- `.devtools/Taskfile.yml` exists (created or pre-existing)
+- `task <service>:up` starts the service successfully
+- Re-running the skill for the same service asks alias-or-cancel (no silent overwrite)
+- Re-running with an identical alias produces "already installed — nothing to do"
+</success_criteria>
