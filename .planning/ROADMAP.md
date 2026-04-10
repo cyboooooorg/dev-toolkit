@@ -45,12 +45,12 @@ Plans:
   3. Running the skill for a service that already exists asks the user to add another instance or cancel — no files are silently overwritten
   4. Adding a second instance with an alias (e.g. `redis-cache`) produces namespaced files that don't disturb the original service's files
   5. Re-running the skill with an identical existing alias produces no changes and informs the user it already exists
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: SKILL.md frontmatter and service registry (5 services with defaults)
-- [ ] 02-02: Interactive Q&A flow (port, version, credentials, RabbitMQ UI prompt)
-- [ ] 02-03: Merge detection, alias handling, and idempotency logic
+- [ ] 02-01-PLAN.md — SKILL.md frontmatter, service registry, and process Steps 1–2 (merge detection + first-run setup)
+- [ ] 02-02-PLAN.md — Interactive Q&A flow: service selection, per-service questions, UI companion, optional prompts, confirmation gate (Steps 3–8)
+- [ ] 02-03-PLAN.md — File writing, .env management, root compose/Taskfile management, alias substitution, done summary (Steps 9–13)
 
 ### Phase 3: Cross-Runtime Wiring & Distribution
 **Goal**: The skill is installed in both AI runtime discovery paths and the repository has documentation enabling any developer to adopt it
