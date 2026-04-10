@@ -15,9 +15,9 @@
 - [ ] **TMPL-03**: Docker Compose service fragment for PostgreSQL (no `version:` key, named volume, health check)
 - [ ] **TMPL-04**: Docker Compose service fragment for MySQL (no `version:` key, named volume, health check)
 - [ ] **TMPL-05**: Docker Compose service fragment for MongoDB (no `version:` key, named volume, health check)
-- [ ] **TMPL-06**: Per-service Taskfile template for each service (e.g. `redis.yml`) with tasks: `up`, `down`, `logs`, `restart`; all `-f` flags use `{{.TASKFILE_DIR}}` for portable paths
-- [ ] **TMPL-07**: Root `Taskfile.yml` (or append to existing) with `includes:` entries pointing to `.devtools/*.yml` using `optional: true`
-- [ ] **TMPL-08**: All generated files written to `.devtools/` directory — the skill never modifies files outside `.devtools/`
+- [x] **TMPL-06**: Per-service Taskfile template for each service (e.g. `redis.yml`) with tasks: `up`, `down`, `logs`, `restart`; all `-f` flags use `{{.TASKFILE_DIR}}` for portable paths
+- [x] **TMPL-07**: Root `Taskfile.yml` (or append to existing) with `includes:` entries pointing to `.devtools/*.yml` using `optional: true`
+- [x] **TMPL-08**: All generated files written to `.devtools/` directory — the skill never modifies files outside `.devtools/`
 
 ### Interactive Configuration (CONF)
 
@@ -77,9 +77,9 @@
 | TMPL-03 | Phase 1 — Templates & Credential Foundation | Pending |
 | TMPL-04 | Phase 1 — Templates & Credential Foundation | Pending |
 | TMPL-05 | Phase 1 — Templates & Credential Foundation | Pending |
-| TMPL-06 | Phase 1 — Templates & Credential Foundation | Pending |
-| TMPL-07 | Phase 1 — Templates & Credential Foundation | Pending |
-| TMPL-08 | Phase 1 — Templates & Credential Foundation | Pending |
+| TMPL-06 | Phase 1 — Templates & Credential Foundation | Complete |
+| TMPL-07 | Phase 1 — Templates & Credential Foundation | Complete |
+| TMPL-08 | Phase 1 — Templates & Credential Foundation | Complete |
 | CRED-01 | Phase 1 — Templates & Credential Foundation | Pending |
 | CRED-02 | Phase 1 — Templates & Credential Foundation | Pending |
 | CRED-03 | Phase 1 — Templates & Credential Foundation | Pending |

@@ -31,8 +31,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Compose service fragments (6 services: Redis, RabbitMQ, PostgreSQL, MySQL/MariaDB, MongoDB, Monitoring) + metadata.json files
-- [ ] 01-02-PLAN.md — Per-service Taskfile templates (6 services) + root Taskfile with optional includes
+- [x] 01-01-PLAN.md — Compose service fragments (6 services: Redis, RabbitMQ, PostgreSQL, MySQL/MariaDB, MongoDB, Monitoring) + metadata.json files
+- [x] 01-02-PLAN.md — Per-service Taskfile templates (6 services) + root Taskfile with optional includes
 - [ ] 01-03-PLAN.md — .env.example credential template + credential compliance sweep
 
 ### Phase 2: Skill Core — Interactive Flow & Merge Logic
