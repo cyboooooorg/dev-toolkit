@@ -106,3 +106,79 @@ test -d .devtools
 
   If `.devtools/.env` already exists and contains `COMPOSE_PROJECT_NAME`, skip the project
   name question entirely (D-20).
+
+## Step 3: Service Selection
+
+If `SERVICE` is already set from `$ARGUMENTS`, skip this step.
+
+Ask the user:
+> `"Which service would you like to add? (redis / rabbitmq / postgres / mysql / mongodb)"`
+
+- Set `SERVICE=<user answer>` (normalize to lowercase).
+- If the answer is not one of the five supported services, respond:
+  > `"Service '<answer>' is not supported. Supported: redis, rabbitmq, postgres, mysql, mongodb."` and stop.
+
+Return to **Step 1** to run the merge detection check for this service before continuing.
+
+## Step 4: Read Service Metadata
+
+Read the metadata file for the selected service from the skill repo (path from the service
+registry in `<context>`):
+
+```
+compose-templates/${SERVICE}/metadata.json
+```
+
+Extract:
+- `parameters[]` — list of `{ name, default, env_var, token }` entries
+- `ui_companion` — present or absent
+- `exporter` — present or absent (used later for monitoring)
+
+Store these for use in Step 5.
+
+## Step 5: Per-Service Q&A
+
+Ask each question individually using `AskUserQuestion`. Show the inline default on every
+question as `[default: X]`. Accept the user's answer or use the default if they press enter.
+
+### Universal questions (all services):
+
+1. **Port?** `[default: <port from metadata>]`
+   - Store answer as `ANSWERS[port]`.
+
+2. **Image version/tag?** `[default: <version from metadata>]`
+   - Store answer as `ANSWERS[version]`.
+
+---
+
+### Per-service credential questions:
+
+#### redis
+3. `"Password? [optional — press enter to skip]"`
+   - If user presses enter → `ANSWERS[password]=""` (empty string — Redis runs without auth).
+   - Otherwise → `ANSWERS[password]=<user input>`.
+
+#### rabbitmq
+3. `"Username? [default: admin]"` → `ANSWERS[username]`
+4. `"Password? (required — no default)"` → `ANSWERS[password]` (must be non-empty; re-ask if blank)
+5. `"Management UI port? [default: 15672]"` → `ANSWERS[ui_port]`
+   *(Note: RabbitMQ management UI is always-on — bundled in the rabbitmq:*-management image.
+   Step 6 "Enable UI companion?" is SKIPPED for RabbitMQ.)*
+
+#### postgres
+3. `"Username? [default: postgres]"` → `ANSWERS[username]`
+4. `"Password? (required — no default)"` → `ANSWERS[password]` (re-ask if blank)
+5. `"Database name? [default: app]"` → `ANSWERS[db_name]`
+
+#### mysql
+3. `"Username? [default: app]"` → `ANSWERS[username]`
+4. `"Password? (required — no default)"` → `ANSWERS[password]` (re-ask if blank)
+5. `"Database name? [default: app]"` → `ANSWERS[db_name]`
+6. `"Root password? (required — no default)"` → `ANSWERS[root_password]`
+   *(MYSQL_ROOT_PASSWORD — required by MariaDB/MySQL even though it has token: null in metadata.json)*
+7. *(MariaDB is the default image variant. MariaDB 11 ≈ MySQL 8 compatible. If user needs MySQL:
+   they can override the version tag to use mysql:8 instead.)*
+
+#### mongodb
+3. `"Username? [default: admin]"` → `ANSWERS[username]`
+4. `"Password? (required — no default)"` → `ANSWERS[password]` (re-ask if blank)
