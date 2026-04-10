@@ -815,22 +815,18 @@ Write these files? [Y/n]
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Redis password omission**
+1. **Redis password omission** *(RESOLVED: W2 fix in 02-03-PLAN.md)*
    - What we know: Template has `command: redis-server --requirepass ${REDIS_PASSWORD}`; Redis may reject empty password arg
    - What's unclear: Does Redis accept `--requirepass ""` as "no auth"?
-   - Recommendation: SKILL.md step should say: "If no password entered, remove the `--requirepass ${REDIS_PASSWORD}` flag from the command line in the copied template"
+   - **Resolution:** SKILL.md Step 9a instructs: when Redis password is empty, remove `--requirepass ${REDIS_PASSWORD}` from the `command:` line and `-a "${REDIS_PASSWORD}"` from the healthcheck before writing.
 
-2. **RabbitMQ UI companion ask**
-   - What we know: RabbitMQ UI is always-on; metadata.json has `ui_companion` with a note saying it's bundled
-   - What's unclear: Should the skill still ask "Enable UI?" (for consistency) or skip it?
-   - Recommendation: Skip "Enable UI?" for RabbitMQ; explain in SKILL.md that management UI is always active. Ask only for UI port per CONF-02.
+2. **RabbitMQ UI companion ask** *(RESOLVED: addressed in plans)*
+   - **Resolution:** Plans 02-01/02-02 correctly skip "Enable UI?" for RabbitMQ; only ask Management UI port per CONF-02.
 
-3. **MySQL variant question**
-   - What we know: MySQL metadata has `default_variant: mariadb` and supports `mysql` opt-in
-   - What's unclear: Should the skill ask "MariaDB (default) or MySQL 8?" per the metadata variants section?
-   - Recommendation: The agent's discretion — suggest asking only for Apple Silicon users (where MySQL 8 requires `platform: linux/amd64`). Default to MariaDB silently, mention in summary.
+3. **MySQL variant question** *(RESOLVED: agent's discretion — default MariaDB)*
+   - **Resolution:** Default to MariaDB 11 silently. Mention in done summary. Users can override version via the version question.
 
 ---
 
