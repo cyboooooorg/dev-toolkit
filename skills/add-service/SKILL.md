@@ -154,11 +154,13 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
 ### Per-service credential questions:
 
 #### redis
+*(Port default: `[default: 6379]`)*
 3. `"Password? [optional — press enter to skip]"`
    - If user presses enter → `ANSWERS[password]=""` (empty string — Redis runs without auth).
    - Otherwise → `ANSWERS[password]=<user input>`.
 
 #### rabbitmq
+*(Port default: `[default: 5672]`)*
 3. `"Username? [default: admin]"` → `ANSWERS[username]`
 4. `"Password? (required — no default)"` → `ANSWERS[password]` (must be non-empty; re-ask if blank)
 5. `"Management UI port? [default: 15672]"` → `ANSWERS[ui_port]`
@@ -166,11 +168,13 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
    Step 6 "Enable UI companion?" is SKIPPED for RabbitMQ.)*
 
 #### postgres
+*(Port default: `[default: 5432]`)*
 3. `"Username? [default: postgres]"` → `ANSWERS[username]`
 4. `"Password? (required — no default)"` → `ANSWERS[password]` (re-ask if blank)
 5. `"Database name? [default: app]"` → `ANSWERS[db_name]`
 
 #### mysql
+*(Port default: `[default: 3306]`)*
 3. `"Username? [default: app]"` → `ANSWERS[username]`
 4. `"Password? (required — no default)"` → `ANSWERS[password]` (re-ask if blank)
 5. `"Database name? [default: app]"` → `ANSWERS[db_name]`
@@ -180,5 +184,81 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
    they can override the version tag to use mysql:8 instead.)*
 
 #### mongodb
+*(Port default: `[default: 27017]`)*
 3. `"Username? [default: admin]"` → `ANSWERS[username]`
 4. `"Password? (required — no default)"` → `ANSWERS[password]` (re-ask if blank)
+
+## Step 6: UI Companion Prompt
+
+**Skip this step entirely for `rabbitmq`** — its management UI is always-on (handled in Step 5).
+
+For all other services (redis, postgres, mysql, mongodb) that have a `ui_companion` entry
+in their metadata:
+
+Ask: `"Enable UI companion? [y/N]"` (default: N)
+
+- If **No** → set `ANSWERS[ui_enabled]=false` and skip to **Step 7**.
+- If **Yes** → set `ANSWERS[ui_enabled]=true`.
+
+  Ask: `"Enable auth on UI? [y/N]"` (default: N) → `ANSWERS[ui_auth]=<true/false>`
+
+  **Service-specific follow-ups when UI is enabled:**
+
+  #### postgres (pgAdmin credentials)
+  Ask: `"pgAdmin login email? [default: admin@local.dev]"` → `ANSWERS[pgadmin_email]`
+  Ask: `"pgAdmin login password? (required)"` → `ANSWERS[pgadmin_password]` (re-ask if blank)
+
+  #### mysql (phpMyAdmin — no extra credentials needed beyond service creds)
+  *(No additional questions — phpMyAdmin connects using MYSQL_USER / MYSQL_PASSWORD.)*
+
+  #### mongodb (Mongo Express auth)
+  If `ANSWERS[ui_auth]=true`:
+    Ask: `"Mongo Express username? [default: admin]"` → `ANSWERS[me_username]`
+    Ask: `"Mongo Express password? (required)"` → `ANSWERS[me_password]` (re-ask if blank)
+
+  #### redis (RedisInsight — no extra credentials needed)
+  *(RedisInsight authenticates via the Redis password already captured in Step 5.)*
+
+## Step 7: Optional Feature Prompts
+
+Ask: `"Also set up Taskfile tasks? [Y/n]"` (default: Y) → `ANSWERS[taskfile]=<true/false>`
+
+Ask: `"Also install monitoring (Grafana + Prometheus)? [y/N]"` (default: N) → `ANSWERS[monitoring]=<true/false>`
+
+If `ANSWERS[monitoring]=true`:
+  Ask: `"Grafana admin password? [default: admin]"` → `ANSWERS[grafana_password]`
+  *(Default is intentionally weak — surfaced here so user can change it.)*
+
+## Step 8: Configuration Summary + Confirmation Gate
+
+Display a summary table of all collected values. Mask passwords with `****`.
+
+Example layout (adapt to the actual service and answers):
+
+```
+Service:        redis
+Mode:           standard install  (or: alias install as "redis-cache")
+─────────────────────────────────────────────
+Port:           6379
+Version:        7
+Password:       ****
+UI companion:   disabled
+Taskfile tasks: yes
+Monitoring:     no
+─────────────────────────────────────────────
+Files to write:
+  .devtools/.gitignore              (first install only)
+  .devtools/redis.compose.yml
+  .devtools/redis.Taskfile.yml      (if Taskfile=yes)
+  .devtools/compose.yml             (created or appended)
+  .devtools/Taskfile.yml            (created on first install only)
+  .devtools/.env                    (appended)
+  .devtools/.env.example            (appended)
+```
+
+Ask: `"Write these files? [Y/n]"`
+
+- If **No** → output `"Cancelled. Nothing written."` and stop.
+- If **Yes** → continue to **Step 9**.
+
+**Do NOT write any files before this confirmation.** Steps 9–13 perform all writes.
