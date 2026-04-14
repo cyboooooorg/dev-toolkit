@@ -61,11 +61,11 @@ Plans:
   2. The canonical `SKILL.md` is present (or symlinked) in both `.github/skills/add-service/` and `.agents/skills/add-service/`
   3. The skill frontmatter explicitly enumerates all 5 supported services so AI runtimes reliably match it for service-addition intents
   4. A developer reading `README.md` understands how to install the skill into any project and which services are supported
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: Skill installation to both runtime discovery paths (Copilot CLI + Claude/MCP)
-- [ ] 03-02: Project README (installation guide + supported services)
+- [ ] 03-01-PLAN.md — Verify SKILL.md frontmatter is valid for skills.sh discovery (SKILL-01, SKILL-02, SKILL-03, DIST-01)
+- [ ] 03-02-PLAN.md — Write root README.md with install command, services table, and .devtools/ output description (DIST-02)
 
 ## Progress
 
