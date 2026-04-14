@@ -10,30 +10,25 @@ tasks:
 
   up:
     desc: Start Prometheus + Grafana monitoring stack
-    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f ./monitoring.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f .devtools/monitoring.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop Prometheus + Grafana
-    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f ./monitoring.compose.yml down
+      - docker compose -f .devtools/monitoring.compose.yml down
 
   logs:
     desc: Follow Prometheus logs (use monitoring:logs-grafana for Grafana)
-    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f ./monitoring.compose.yml logs -f prometheus
+      - docker compose -f .devtools/monitoring.compose.yml logs -f prometheus
 
   logs-grafana:
     desc: Follow Grafana logs
-    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f ./monitoring.compose.yml logs -f grafana
+      - docker compose -f .devtools/monitoring.compose.yml logs -f grafana
 
   restart:
     desc: Restart Prometheus and Grafana containers
-    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f ./monitoring.compose.yml restart prometheus grafana
+      - docker compose -f .devtools/monitoring.compose.yml restart prometheus grafana

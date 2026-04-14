@@ -9,36 +9,30 @@ tasks:
 
   up:
     desc: Start MongoDB (requires COMPOSE_PROFILES=services in .devtools/.env)
-    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f ./mongodb.compose.yml up -d --remove-orphans
+      - docker compose -f .devtools/mongodb.compose.yml up -d --remove-orphans
 
   up-ui:
     desc: Start MongoDB + Mongo Express UI on MONGODB_UI_PORT (adds ui profile)
-    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f ./mongodb.compose.yml --profile ui up -d --remove-orphans
+      - docker compose -f .devtools/mongodb.compose.yml --profile ui up -d --remove-orphans
 
   up-monitoring:
     desc: Start MongoDB + mongodb_exporter (adds monitoring profile)
-    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f ./mongodb.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f .devtools/mongodb.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop MongoDB and all its companions
-    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f ./mongodb.compose.yml down
+      - docker compose -f .devtools/mongodb.compose.yml down
 
   logs:
     desc: Follow MongoDB container logs
-    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f ./mongodb.compose.yml logs -f mongodb
+      - docker compose -f .devtools/mongodb.compose.yml logs -f mongodb
 
   restart:
     desc: Restart MongoDB container
-    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f ./mongodb.compose.yml restart mongodb
+      - docker compose -f .devtools/mongodb.compose.yml restart mongodb
