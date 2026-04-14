@@ -298,7 +298,7 @@ This installs the skill to all detected AI agents in your project
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **`monitoring` service in templates**
    - What we know: `compose-templates/monitoring/` and `taskfile-templates/monitoring/` exist; the SKILL.md service registry includes monitoring; SKILL-03 only lists 5 services
