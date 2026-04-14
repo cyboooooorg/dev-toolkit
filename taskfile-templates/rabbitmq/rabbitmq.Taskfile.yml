@@ -11,30 +11,36 @@ tasks:
 
   up:
     desc: Start RabbitMQ with management UI on RABBITMQ_UI_PORT (requires COMPOSE_PROFILES=services in .env)
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml up -d --remove-orphans
+      - docker compose -f ./rabbitmq.compose.yml up -d --remove-orphans
 
   up-ui:
     desc: Start RabbitMQ (management UI is bundled — this is equivalent to up)
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml up -d --remove-orphans
+      - docker compose -f ./rabbitmq.compose.yml up -d --remove-orphans
 
   up-monitoring:
     desc: Start RabbitMQ + metrics exporter (adds monitoring profile)
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f ./rabbitmq.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop RabbitMQ and all its companions
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml down
+      - docker compose -f ./rabbitmq.compose.yml down
 
   logs:
     desc: Follow RabbitMQ container logs
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml logs -f rabbitmq
+      - docker compose -f ./rabbitmq.compose.yml logs -f rabbitmq
 
   restart:
     desc: Restart RabbitMQ container
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml restart rabbitmq
+      - docker compose -f ./rabbitmq.compose.yml restart rabbitmq

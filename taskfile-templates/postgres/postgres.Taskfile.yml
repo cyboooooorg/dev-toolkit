@@ -9,30 +9,36 @@ tasks:
 
   up:
     desc: Start PostgreSQL (requires COMPOSE_PROFILES=services in .devtools/.env)
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml up -d --remove-orphans
+      - docker compose -f ./postgres.compose.yml up -d --remove-orphans
 
   up-ui:
     desc: Start PostgreSQL + pgAdmin UI on POSTGRES_UI_PORT (adds ui profile)
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml --profile ui up -d --remove-orphans
+      - docker compose -f ./postgres.compose.yml --profile ui up -d --remove-orphans
 
   up-monitoring:
     desc: Start PostgreSQL + postgres_exporter (adds monitoring profile)
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f ./postgres.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop PostgreSQL and all its companions
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml down
+      - docker compose -f ./postgres.compose.yml down
 
   logs:
     desc: Follow PostgreSQL container logs
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml logs -f postgres
+      - docker compose -f ./postgres.compose.yml logs -f postgres
 
   restart:
     desc: Restart PostgreSQL container
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml restart postgres
+      - docker compose -f ./postgres.compose.yml restart postgres

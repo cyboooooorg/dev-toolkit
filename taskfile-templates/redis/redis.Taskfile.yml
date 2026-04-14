@@ -10,30 +10,36 @@ tasks:
 
   up:
     desc: Start Redis (main service — requires COMPOSE_PROFILES=services in .devtools/.env)
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml up -d --remove-orphans
+      - docker compose -f ./redis.compose.yml up -d --remove-orphans
 
   up-ui:
     desc: Start Redis + RedisInsight UI (adds ui profile)
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml --profile ui up -d --remove-orphans
+      - docker compose -f ./redis.compose.yml --profile ui up -d --remove-orphans
 
   up-monitoring:
     desc: Start Redis + metrics exporter (adds monitoring profile)
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f ./redis.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop Redis and all its companions
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml down
+      - docker compose -f ./redis.compose.yml down
 
   logs:
     desc: Follow Redis container logs
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml logs -f redis
+      - docker compose -f ./redis.compose.yml logs -f redis
 
   restart:
     desc: Restart Redis container
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml restart redis
+      - docker compose -f ./redis.compose.yml restart redis
