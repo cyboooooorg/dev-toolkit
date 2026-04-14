@@ -1,6 +1,6 @@
 ---
 name: add-service
-description: Add a Docker dev service to this project. Supported services: Redis, RabbitMQ, PostgreSQL, MySQL/MariaDB, MongoDB. Writes Docker Compose and Taskfile configs to .devtools/.
+description: "Add a Docker dev service to this project. Supported services: Redis, RabbitMQ, PostgreSQL, MySQL/MariaDB, MongoDB. Writes Docker Compose and Taskfile configs to .devtools/."
 argument-hint: "<service-name>"
 allowed-tools: Read, Write, Bash, AskUserQuestion
 ---
