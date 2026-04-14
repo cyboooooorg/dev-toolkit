@@ -4,9 +4,9 @@
 
 ### Skill Format (SKILL)
 
-- [ ] **SKILL-01**: AI invokes the skill when a user says something like "add Redis to this project" or "install RabbitMQ"
-- [ ] **SKILL-02**: Skill is defined as a single canonical `SKILL.md` file installed in both `.github/skills/` (Copilot CLI) and `.agents/skills/` (Claude/MCP)
-- [ ] **SKILL-03**: Skill description in frontmatter explicitly enumerates all 5 supported services so AI runtimes can reliably trigger it
+- [x] **SKILL-01**: AI invokes the skill when a user says something like "add Redis to this project" or "install RabbitMQ"
+- [x] **SKILL-02**: Skill is defined as a single canonical `SKILL.md` file installed in both `.github/skills/` (Copilot CLI) and `.agents/skills/` (Claude/MCP)
+- [x] **SKILL-03**: Skill description in frontmatter explicitly enumerates all 5 supported services so AI runtimes can reliably trigger it
 
 ### Service Templates (TMPL)
 
@@ -40,7 +40,7 @@
 
 ### Distribution (DIST)
 
-- [ ] **DIST-01**: Canonical `SKILL.md` is symlinked (or copied) into both `.github/skills/add-service/` and `.agents/skills/add-service/`
+- [x] **DIST-01**: Canonical `SKILL.md` is symlinked (or copied) into both `.github/skills/add-service/` and `.agents/skills/add-service/`
 - [ ] **DIST-02**: Repository includes a `README.md` explaining how to install the skill into a project and which services are supported
 
 ---
@@ -90,8 +90,8 @@
 | MERGE-02 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
 | MERGE-03 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
 | MERGE-04 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
-| SKILL-01 | Phase 3 — Cross-Runtime Wiring & Distribution | Pending |
-| SKILL-02 | Phase 3 — Cross-Runtime Wiring & Distribution | Pending |
-| SKILL-03 | Phase 3 — Cross-Runtime Wiring & Distribution | Pending |
-| DIST-01 | Phase 3 — Cross-Runtime Wiring & Distribution | Pending |
+| SKILL-01 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |
+| SKILL-02 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |
+| SKILL-03 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |
+| DIST-01 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |
 | DIST-02 | Phase 3 — Cross-Runtime Wiring & Distribution | Pending |

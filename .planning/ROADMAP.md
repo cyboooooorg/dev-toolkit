@@ -64,7 +64,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Verify SKILL.md frontmatter is valid for skills.sh discovery (SKILL-01, SKILL-02, SKILL-03, DIST-01)
+- [x] 03-01-PLAN.md — Verify SKILL.md frontmatter is valid for skills.sh discovery (SKILL-01, SKILL-02, SKILL-03, DIST-01)
 - [ ] 03-02-PLAN.md — Write root README.md with install command, services table, and .devtools/ output description (DIST-02)
 
 ## Progress
@@ -76,4 +76,4 @@ Phases execute in numeric order: 1 → 2 → 3
 |-------|----------------|--------|-----------|
 | 1. Templates & Credential Foundation | 3/3 | Complete   | 2026-04-10 |
 | 2. Skill Core — Interactive Flow & Merge Logic | 0/3 | Not started | - |
-| 3. Cross-Runtime Wiring & Distribution | 0/2 | Not started | - |
+| 3. Cross-Runtime Wiring & Distribution | 1/2 | In Progress|  |
