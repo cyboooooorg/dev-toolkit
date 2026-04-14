@@ -358,10 +358,19 @@ in `.devtools/.env`. If it does:
 - Append the new value on the next line.
 - Record the conflict in a warnings list for the done summary.
 
-If `COMPOSE_PROJECT_NAME` is not yet in `.devtools/.env`, prepend it as the very first entry:
+If `COMPOSE_PROJECT_NAME` is not yet in `.devtools/.env`, prepend it as the very first entry.
+Immediately after `COMPOSE_PROJECT_NAME`, if `COMPOSE_PROFILES` is not yet in `.devtools/.env`,
+add it on the next line:
+
 ```
 COMPOSE_PROJECT_NAME=<value>
+COMPOSE_PROFILES=services
 ```
+
+`COMPOSE_PROFILES=services` ensures `docker compose up` (with no `--profile` flag) starts
+the core service containers. Without it the default profile is empty and all containers are
+skipped. Never overwrite an existing `COMPOSE_PROFILES` entry — the user may have added `ui`
+or `monitoring` to it.
 
 ### 10b: Write .devtools/.env.example
 
@@ -373,7 +382,13 @@ values only** — never real credentials:
 REDIS_PORT=6379
 REDIS_VERSION=7
 REDIS_PASSWORD=CHANGE_ME
-REDIS_UI_PORT=8001
+REDIS_UI_PORT=5540
+```
+
+On the first service install, also add to `.devtools/.env.example`:
+```
+COMPOSE_PROJECT_NAME=myapp
+COMPOSE_PROFILES=services
 ```
 
 Use obvious placeholder strings for credentials: `CHANGE_ME`, `admin@example.com`, etc.
