@@ -34,7 +34,12 @@ services:
       - ui
     container_name: ${COMPOSE_PROJECT_NAME:-devtools}-redisinsight
     ports:
-      - "127.0.0.1:${REDIS_UI_PORT}:8001"
+      - "127.0.0.1:${REDIS_UI_PORT}:5540"
+    environment:
+      RI_REDIS_HOST: redis
+      RI_REDIS_PORT: 6379
+      RI_REDIS_USERNAME: default
+      RI_REDIS_PASSWORD: ${REDIS_PASSWORD}
     # No volumes — ephemeral by design (UI config is per-session)
     networks:
       - redis_net
