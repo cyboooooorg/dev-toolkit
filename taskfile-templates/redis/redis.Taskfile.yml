@@ -11,17 +11,17 @@ tasks:
   up:
     desc: Start Redis (main service — requires COMPOSE_PROFILES=services in .devtools/.env)
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml up -d
+      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml up -d --remove-orphans
 
   up-ui:
     desc: Start Redis + RedisInsight UI (adds ui profile)
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml --profile ui up -d
+      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml --profile ui up -d --remove-orphans
 
   up-monitoring:
     desc: Start Redis + metrics exporter (adds monitoring profile)
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml --profile monitoring up -d
+      - docker compose -f {{.TASKFILE_DIR}}/redis.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop Redis and all its companions

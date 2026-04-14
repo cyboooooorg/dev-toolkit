@@ -34,59 +34,19 @@ tasks:
   up:
     desc: Start all installed services (skips services not yet installed)
     cmds:
-      - task: redis:up
-        ignore_error: true
-      - task: rabbitmq:up
-        ignore_error: true
-      - task: postgres:up
-        ignore_error: true
-      - task: mysql:up
-        ignore_error: true
-      - task: mongodb:up
-        ignore_error: true
+      - docker compose -f {{.TASKFILE_DIR}}/compose.yml up -d --remove-orphans
 
   down:
     desc: Stop all installed services
     cmds:
-      - task: redis:down
-        ignore_error: true
-      - task: rabbitmq:down
-        ignore_error: true
-      - task: postgres:down
-        ignore_error: true
-      - task: mysql:down
-        ignore_error: true
-      - task: mongodb:down
-        ignore_error: true
-      - task: monitoring:down
-        ignore_error: true
+      - docker compose -f {{.TASKFILE_DIR}}/compose.yml down --remove-orphans
 
   up-ui:
     desc: Start all installed services with their UI companions
     cmds:
-      - task: redis:up-ui
-        ignore_error: true
-      - task: rabbitmq:up-ui
-        ignore_error: true
-      - task: postgres:up-ui
-        ignore_error: true
-      - task: mysql:up-ui
-        ignore_error: true
-      - task: mongodb:up-ui
-        ignore_error: true
+      - docker compose -f {{.TASKFILE_DIR}}/compose.yml --profile ui up -d --remove-orphans
 
   up-monitoring:
     desc: Start all installed services with their metrics exporters + central monitoring stack
     cmds:
-      - task: redis:up-monitoring
-        ignore_error: true
-      - task: rabbitmq:up-monitoring
-        ignore_error: true
-      - task: postgres:up-monitoring
-        ignore_error: true
-      - task: mysql:up-monitoring
-        ignore_error: true
-      - task: mongodb:up-monitoring
-        ignore_error: true
-      - task: monitoring:up
-        ignore_error: true
+      - docker compose -f {{.TASKFILE_DIR}}/compose.yml --profile monitoring up -d --remove-orphans

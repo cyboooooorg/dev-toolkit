@@ -11,7 +11,7 @@ tasks:
   up:
     desc: Start Prometheus + Grafana monitoring stack
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/monitoring.compose.yml --profile monitoring up -d
+      - docker compose -f {{.TASKFILE_DIR}}/monitoring.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop Prometheus + Grafana

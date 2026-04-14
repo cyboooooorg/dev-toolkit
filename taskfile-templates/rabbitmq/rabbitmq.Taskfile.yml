@@ -12,17 +12,17 @@ tasks:
   up:
     desc: Start RabbitMQ with management UI on RABBITMQ_UI_PORT (requires COMPOSE_PROFILES=services in .env)
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml up -d
+      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml up -d --remove-orphans
 
   up-ui:
     desc: Start RabbitMQ (management UI is bundled — this is equivalent to up)
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml up -d
+      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml up -d --remove-orphans
 
   up-monitoring:
     desc: Start RabbitMQ + metrics exporter (adds monitoring profile)
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml --profile monitoring up -d
+      - docker compose -f {{.TASKFILE_DIR}}/rabbitmq.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop RabbitMQ and all its companions

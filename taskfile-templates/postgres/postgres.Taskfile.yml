@@ -10,17 +10,17 @@ tasks:
   up:
     desc: Start PostgreSQL (requires COMPOSE_PROFILES=services in .devtools/.env)
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml up -d
+      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml up -d --remove-orphans
 
   up-ui:
     desc: Start PostgreSQL + pgAdmin UI on POSTGRES_UI_PORT (adds ui profile)
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml --profile ui up -d
+      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml --profile ui up -d --remove-orphans
 
   up-monitoring:
     desc: Start PostgreSQL + postgres_exporter (adds monitoring profile)
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml --profile monitoring up -d
+      - docker compose -f {{.TASKFILE_DIR}}/postgres.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop PostgreSQL and all its companions
