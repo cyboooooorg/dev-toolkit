@@ -41,7 +41,7 @@
 ### Distribution (DIST)
 
 - [x] **DIST-01**: Canonical `SKILL.md` is symlinked (or copied) into both `.github/skills/add-service/` and `.agents/skills/add-service/`
-- [ ] **DIST-02**: Repository includes a `README.md` explaining how to install the skill into a project and which services are supported
+- [x] **DIST-02**: Repository includes a `README.md` explaining how to install the skill into a project and which services are supported
 
 ---
 
@@ -94,4 +94,4 @@
 | SKILL-02 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |
 | SKILL-03 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |
 | DIST-01 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |
-| DIST-02 | Phase 3 — Cross-Runtime Wiring & Distribution | Pending |
+| DIST-02 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |

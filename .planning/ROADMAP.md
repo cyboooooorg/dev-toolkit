@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Templates & Credential Foundation** - All 5 service templates (Compose + Taskfile) authored with correct credential patterns (completed 2026-04-10)
 - [ ] **Phase 2: Skill Core — Interactive Flow & Merge Logic** - SKILL.md that guides an AI through interactive config, credential capture, and safe idempotent writes
-- [ ] **Phase 3: Cross-Runtime Wiring & Distribution** - Skill discoverable by both Copilot CLI and Claude/MCP; README documents installation
+- [x] **Phase 3: Cross-Runtime Wiring & Distribution** - Skill discoverable by both Copilot CLI and Claude/MCP; README documents installation (completed 2026-04-14)
 
 ## Phase Details
 
@@ -65,7 +65,7 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md — Verify SKILL.md frontmatter is valid for skills.sh discovery (SKILL-01, SKILL-02, SKILL-03, DIST-01)
-- [ ] 03-02-PLAN.md — Write root README.md with install command, services table, and .devtools/ output description (DIST-02)
+- [x] 03-02-PLAN.md — Write root README.md with install command, services table, and .devtools/ output description (DIST-02)
 
 ## Progress
 
@@ -76,4 +76,4 @@ Phases execute in numeric order: 1 → 2 → 3
 |-------|----------------|--------|-----------|
 | 1. Templates & Credential Foundation | 3/3 | Complete   | 2026-04-10 |
 | 2. Skill Core — Interactive Flow & Merge Logic | 0/3 | Not started | - |
-| 3. Cross-Runtime Wiring & Distribution | 1/2 | In Progress|  |
+| 3. Cross-Runtime Wiring & Distribution | 2/2 | Complete   | 2026-04-14 |
