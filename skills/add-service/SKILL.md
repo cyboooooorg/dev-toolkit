@@ -20,8 +20,8 @@ Service requested: $ARGUMENTS
 
 ## Service Registry
 
-Resolve all paths below relative to the directory containing this SKILL.md file (the skill
-repo root). The target project's CWD is separate — do NOT mix these paths.
+All template paths below are relative to `SKILL_RAW_BASE` (defined below) — fetch them
+remotely at runtime. The target project's CWD is separate — do NOT mix these paths.
 
 | Service | Compose Template | Taskfile Template | Metadata |
 |---------|-----------------|-------------------|----------|
@@ -33,6 +33,23 @@ repo root). The target project's CWD is separate — do NOT mix these paths.
 | monitoring | compose-templates/monitoring/monitoring.compose.yml | taskfile-templates/monitoring/monitoring.Taskfile.yml | compose-templates/monitoring/metadata.json |
 
 Root Taskfile template: `taskfile-templates/root/Taskfile.yml`
+
+## Remote Template Base URL
+
+Templates are fetched at runtime from the skill's source repository. All template reads
+below use this base URL (so the skill works when installed via `npx skills add` — only
+SKILL.md is installed locally):
+
+```
+SKILL_RAW_BASE=https://raw.githubusercontent.com/Cyboooooorg/dev-tools/main
+```
+
+Fetch any template with:
+```bash
+curl -fsSL "${SKILL_RAW_BASE}/<template-path>"
+```
+
+If `curl` is unavailable, use `wget -qO- "${SKILL_RAW_BASE}/<template-path>"`.
 
 ## Template Format Note
 
@@ -122,11 +139,10 @@ Return to **Step 1** to run the merge detection check for this service before co
 
 ## Step 4: Read Service Metadata
 
-Read the metadata file for the selected service from the skill repo (path from the service
-registry in `<context>`):
+Read the metadata file for the selected service from the skill repo using:
 
-```
-compose-templates/${SERVICE}/metadata.json
+```bash
+curl -fsSL "${SKILL_RAW_BASE}/compose-templates/${SERVICE}/metadata.json"
 ```
 
 Extract:
@@ -269,9 +285,9 @@ User confirmed "Yes" at Step 8. Proceed with file writes.
 
 ### 9a: Write Compose File
 
-Read the compose template from the skill repo:
-```
-compose-templates/${SERVICE}/${SERVICE}.compose.yml
+Fetch the compose template from the skill repo:
+```bash
+curl -fsSL "${SKILL_RAW_BASE}/compose-templates/${SERVICE}/${SERVICE}.compose.yml"
 ```
 
 **For standard install (`MODE=standard`):** Copy the file content verbatim.
@@ -295,9 +311,9 @@ Where `<filename>` is `${SERVICE}` for standard, or `${SERVICE_SLUG}` for alias
 
 ### 9b: Write Taskfile (if ANSWERS[taskfile]=true)
 
-Read the per-service Taskfile template from the skill repo:
-```
-taskfile-templates/${SERVICE}/${SERVICE}.Taskfile.yml
+Fetch the per-service Taskfile template from the skill repo:
+```bash
+curl -fsSL "${SKILL_RAW_BASE}/taskfile-templates/${SERVICE}/${SERVICE}.Taskfile.yml"
 ```
 
 **For alias install:** Perform string substitutions (see Step 12) on the in-memory copy.
@@ -384,11 +400,17 @@ GRAFANA_ADMIN_PASSWORD=CHANGE_ME
 
 Copy monitoring templates verbatim (no token substitution needed):
 
-1. Read `compose-templates/monitoring/monitoring.compose.yml` from the skill repo.
-   Write to `.devtools/monitoring.compose.yml` in the target project.
+1. Fetch and write the compose template:
+   ```bash
+   curl -fsSL "${SKILL_RAW_BASE}/compose-templates/monitoring/monitoring.compose.yml"
+   ```
+   Write fetched content to `.devtools/monitoring.compose.yml` in the target project.
 
-2. If `ANSWERS[taskfile]=true`, read `taskfile-templates/monitoring/monitoring.Taskfile.yml`
-   from the skill repo. Write to `.devtools/monitoring.Taskfile.yml` in the target project.
+2. If `ANSWERS[taskfile]=true`, fetch and write the Taskfile:
+   ```bash
+   curl -fsSL "${SKILL_RAW_BASE}/taskfile-templates/monitoring/monitoring.Taskfile.yml"
+   ```
+   Write fetched content to `.devtools/monitoring.Taskfile.yml` in the target project.
 
 3. After writing `monitoring.compose.yml` (step 1 above), update `.devtools/compose.yml`
    to add the monitoring include (using the same create-or-append logic as Step 11a):
@@ -431,8 +453,11 @@ Check if `.devtools/Taskfile.yml` exists:
 test -f .devtools/Taskfile.yml
 ```
 
-**If it does NOT exist:** Copy `taskfile-templates/root/Taskfile.yml` verbatim to
-`.devtools/Taskfile.yml`.
+**If it does NOT exist:** Fetch and write the root Taskfile:
+```bash
+curl -fsSL "${SKILL_RAW_BASE}/taskfile-templates/root/Taskfile.yml"
+```
+Write the fetched content verbatim to `.devtools/Taskfile.yml`.
 
 **If it DOES exist:** Do NOT overwrite it. The root Taskfile template already contains
 `optional: true` for all 6 service includes — missing service files are silently skipped
