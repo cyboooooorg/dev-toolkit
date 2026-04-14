@@ -3,16 +3,17 @@
 # Add to your project root Taskfile.yml:
 #   includes:
 #     devtools:
+#       dir: .devtools
 #       taskfile: ./.devtools/Taskfile.yml
 #       optional: true
 # Then access services as: task devtools:redis:up
 
-version: '3'
+version: "3"
 
 includes:
   redis:
     taskfile: ./redis.Taskfile.yml
-    optional: true    # Silently ignored if Redis is not installed
+    optional: true # Silently ignored if Redis is not installed
   rabbitmq:
     taskfile: ./rabbitmq.Taskfile.yml
     optional: true
@@ -30,23 +31,22 @@ includes:
     optional: true
 
 tasks:
-
   up:
     desc: Start all installed services (skips services not yet installed)
     cmds:
-      - docker compose -f .devtools/compose.yml up -d --remove-orphans
+      - docker compose -f {{.TASKFILE_DIR}}/compose.yml up -d --remove-orphans
 
   down:
     desc: Stop all installed services
     cmds:
-      - docker compose -f .devtools/compose.yml down --remove-orphans
+      - docker compose -f {{.TASKFILE_DIR}}/compose.yml down --remove-orphans
 
   up-ui:
     desc: Start all installed services with their UI companions
     cmds:
-      - docker compose -f .devtools/compose.yml --profile ui up -d --remove-orphans
+      - docker compose -f {{.TASKFILE_DIR}}/compose.yml --profile ui up -d --remove-orphans
 
   up-monitoring:
     desc: Start all installed services with their metrics exporters + central monitoring stack
     cmds:
-      - docker compose -f .devtools/compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f {{.TASKFILE_DIR}}/compose.yml --profile monitoring up -d --remove-orphans
