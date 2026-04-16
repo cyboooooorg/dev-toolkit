@@ -272,13 +272,14 @@ Taskfile tasks: yes
 Monitoring:     no
 ─────────────────────────────────────────────
 Files to write:
-  .devtools/.gitignore              (first install only)
-  .devtools/redis.compose.yml
-  .devtools/redis.Taskfile.yml      (if Taskfile=yes)
-  .devtools/compose.yml             (created or appended)
-  .devtools/Taskfile.yml            (created on first install only)
-  .devtools/.env                    (appended)
-  .devtools/.env.example            (appended)
+  .devtools/.gitignore                     (first install only)
+  .devtools/redis/redis.compose.yml        (or .devtools/redis-cache/redis-cache.compose.yml for alias)
+  .devtools/redis/redis.Taskfile.yml       (if Taskfile=yes)
+  .devtools/redis/.env                     (service credentials only)
+  .devtools/compose.yml                    (created or appended)
+  .devtools/Taskfile.yml                   (created on first install only)
+  .devtools/.env                           (COMPOSE_PROJECT_NAME + COMPOSE_PROFILES, first install only)
+  .devtools/.env.example                   (updated, first install only)
 ```
 
 Ask: `"Write these files? [Y/n]"`
@@ -311,12 +312,24 @@ Write the modified content (not the raw template) to `.devtools/redis.compose.ym
 file content — see **Step 12** for the complete substitution map. Apply substitutions to the
 in-memory copy before writing. Do NOT modify the original template file.
 
+First, create the service subdirectory:
+```bash
+mkdir -p .devtools/${SERVICE_SLUG}
+```
+Where `${SERVICE_SLUG}` equals `${SERVICE}` for standard installs (e.g. `redis`) and
+`${SERVICE}-${ALIAS}` for alias installs (e.g. `redis-cache`). (D-01/D-02)
+
 Write to the target project:
 ```
-.devtools/<filename>.compose.yml
+.devtools/${SERVICE_SLUG}/<filename>.compose.yml
 ```
 Where `<filename>` is `${SERVICE}` for standard, or `${SERVICE_SLUG}` for alias
-(e.g. `redis-cache`).
+(e.g. `.devtools/redis-cache/redis-cache.compose.yml`). (D-03/D-04)
+
+**Note on `env_file: .env`:** The compose template contains `env_file: .env` — Docker Compose
+`include:` resolves `env_file` paths relative to the included file's directory. Since the
+compose file lives in `.devtools/${SERVICE_SLUG}/`, `env_file: .env` automatically resolves
+to `.devtools/${SERVICE_SLUG}/.env`. No template changes are required. (D-07)
 
 ### 9b: Write Taskfile (if ANSWERS[taskfile]=true)
 
@@ -327,11 +340,12 @@ curl -fsSL "${SKILL_RAW_BASE}/taskfile-templates/${SERVICE}/${SERVICE}.Taskfile.
 
 **For alias install:** Perform string substitutions (see Step 12) on the in-memory copy.
 
-Write to the target project:
+Write to the target project (subfolder already created by Step 9a mkdir):
 ```
-.devtools/<filename>.Taskfile.yml
+.devtools/${SERVICE_SLUG}/<filename>.Taskfile.yml
 ```
-Where `<filename>` is `${SERVICE}` for standard, or `${SERVICE_SLUG}` for alias.
+Where `<filename>` is `${SERVICE}` for standard, or `${SERVICE_SLUG}` for alias
+(e.g. `.devtools/redis-cache/redis-cache.Taskfile.yml`). (D-03/D-04)
 
 **Note:** Always write the per-service file (Step 9) BEFORE updating `compose.yml` (Step 11).
 This ensures `compose.yml` never references a file that failed to write.
