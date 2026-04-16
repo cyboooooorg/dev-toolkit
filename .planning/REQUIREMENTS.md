@@ -15,7 +15,7 @@
 - [ ] **TMPL-03**: Docker Compose service fragment for PostgreSQL (no `version:` key, named volume, health check)
 - [ ] **TMPL-04**: Docker Compose service fragment for MySQL (no `version:` key, named volume, health check)
 - [ ] **TMPL-05**: Docker Compose service fragment for MongoDB (no `version:` key, named volume, health check)
-- [x] **TMPL-06**: Per-service Taskfile template for each service (e.g. `redis.yml`) with tasks: `up`, `down`, `logs`, `restart`; all `-f` flags use `{{.TASKFILE_DIR}}` for portable paths
+- [ ] **TMPL-06**: Per-service Taskfile template for each service (e.g. `redis.yml`) with tasks: `up`, `down`, `logs`, `restart`; all `-f` flags use `{{.TASKFILE_DIR}}` for portable paths
 - [x] **TMPL-07**: Root `Taskfile.yml` (or append to existing) with `includes:` entries pointing to `.devtools/*.yml` using `optional: true`
 - [x] **TMPL-08**: All generated files written to `.devtools/` directory — the skill never modifies files outside `.devtools/`
 
@@ -77,19 +77,19 @@
 | TMPL-03 | Phase 1 — Templates & Credential Foundation | Pending |
 | TMPL-04 | Phase 1 — Templates & Credential Foundation | Pending |
 | TMPL-05 | Phase 1 — Templates & Credential Foundation | Pending |
-| TMPL-06 | Phase 1 — Templates & Credential Foundation | Complete |
+| TMPL-06 | Phase 6 — Fix Taskfile Integration & UI Port Gap | Pending |
 | TMPL-07 | Phase 1 — Templates & Credential Foundation | Complete |
 | TMPL-08 | Phase 1 — Templates & Credential Foundation | Complete |
 | CRED-01 | Phase 1 — Templates & Credential Foundation | Complete |
 | CRED-02 | Phase 1 — Templates & Credential Foundation | Complete |
 | CRED-03 | Phase 1 — Templates & Credential Foundation | Complete |
-| CONF-01 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
+| CONF-01 | Phase 6 — Fix Taskfile Integration & UI Port Gap | Pending |
 | CONF-02 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
 | CONF-03 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
 | MERGE-01 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
 | MERGE-02 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
-| MERGE-03 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
-| MERGE-04 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
+| MERGE-03 | Phase 6 — Fix Taskfile Integration & UI Port Gap | Pending |
+| MERGE-04 | Phase 7 — Fix MERGE-04 Idempotency UX | Pending |
 | SKILL-01 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |
 | SKILL-02 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |
 | SKILL-03 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |

@@ -75,8 +75,12 @@ Phases execute in numeric order: 1 → 2 → 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Templates & Credential Foundation | 3/3 | Complete   | 2026-04-10 |
-| 2. Skill Core — Interactive Flow & Merge Logic | 0/3 | Not started | - |
+| 2. Skill Core — Interactive Flow & Merge Logic | 3/3 | Complete | 2026-04-13 |
 | 3. Cross-Runtime Wiring & Distribution | 2/2 | Complete   | 2026-04-14 |
+| 4. Subfolder Output Structure | 3/3 | Complete | 2026-04-15 |
+| 5. New Instance Alias Prompt | 1/1 | Complete | 2026-04-16 |
+| 6. Fix Taskfile Integration & UI Port Gap | 0/1 | Not started | - |
+| 7. Fix MERGE-04 Idempotency UX | 0/1 | Not started | - |
 
 ### Phase 4: Subfolder Output Structure — Per-service subdirectory layout in .devtools/
 
@@ -99,3 +103,25 @@ Plans:
 
 Plans:
 - [x] 05-01-PLAN.md — Rewrite Branch B alias validation loop (D-01–D-09) + insert proactive first-install alias prompt in Step 1 (D-10–D-13)
+
+### Phase 6: Fix Taskfile Integration & UI Port Gap
+
+**Goal:** Fix 3 critical integration breaks and REDIS_UI_PORT gap found in v1.0 milestone audit: update all 6 per-service Taskfile templates to subfolder compose paths, add alias `includes:` append instruction in SKILL.md Step 11b, fix Step 12 full path substitution, and add REDIS_UI_PORT question + `.env` write.
+**Requirements**: TMPL-06, MERGE-03, CONF-01
+**Gap Closure:** Closes Break 1 (P0), Break 2 (P1), Break 3 (P0), Gap 1 (P2) from v1.0 milestone audit
+**Depends on:** Phase 5
+**Plans:** 1 plan
+
+Plans:
+- [ ] 06-01-PLAN.md — Fix per-service Taskfile templates (Break 1) + SKILL.md Step 11b alias include append (Break 3) + Step 12 path substitution (Break 2) + REDIS_UI_PORT Q&A and env write (Gap 1)
+
+### Phase 7: Fix MERGE-04 Idempotency UX
+
+**Goal:** When re-running the skill for an already-installed alias, emit "already installed — nothing to do" and exit cleanly instead of entering the alias conflict re-prompt loop.
+**Requirements**: MERGE-04
+**Gap Closure:** Closes Gap 2 (P3) from v1.0 milestone audit
+**Depends on:** Phase 6
+**Plans:** 1 plan
+
+Plans:
+- [ ] 07-01-PLAN.md — Detect identical alias re-install in Step 1a Branch B conflict check; exit early with "already installed" message instead of prompting for a different alias
