@@ -180,22 +180,52 @@ If the user provides a non-empty rename suffix (e.g. `cache`):
 
 ### Branch B: User skips rename (presses Enter)
 
-If the user presses Enter without providing a suffix:
+If the user presses Enter without providing a suffix, enter the alias input loop (D-09):
 
-Ask: `"Add another instance with an alias, or cancel? [alias/cancel]"`
+Ask:
+> `"Enter alias (e.g. 'cache' → ${SERVICE}-cache): _"`
 
-- If user answers **cancel** → output `"Nothing written. Exiting."` and stop.
-- If user provides an **alias** (e.g. `cache`, `session`):
-  - Set `ALIAS=<alias>` (lowercase, letters/numbers/hyphens only).
-  - Set `SERVICE_SLUG=${SERVICE}-${ALIAS}` (e.g. `redis-cache`).
-  - Set `SERVICE_SNAKE=${SERVICE}_${ALIAS}` (e.g. `redis_cache`) — used for YAML service keys, volume keys, network keys.
-  - Set `ENV_PREFIX=<SERVICE_UPPER>_<ALIAS_UPPER>` (e.g. `REDIS_CACHE`) — used for env var names.
-  - Check if alias already installed:
-    ```bash
-    test -f .devtools/${SERVICE_SLUG}/${SERVICE_SLUG}.compose.yml
-    ```
-  - If file **exists** → output `"${SERVICE_SLUG} is already installed — nothing to do."` and stop. (MERGE-04)
-  - If file **does not exist** → set `MODE=alias` and continue to **Step 3**.
+For each alias input, apply the following validation sequence. **The loop repeats until
+the user provides a valid free alias or types `cancel`.**
+
+**1. Handle 'cancel':**
+If the user types `cancel` → output `"Nothing written. Exiting."` and stop.
+
+**2. Normalize the alias (D-04, D-05):**
+- Lowercase the input.
+- Replace any character that is not a letter (a–z), digit (0–9), or hyphen with a hyphen.
+- Collapse consecutive hyphens into a single hyphen.
+- Trim leading and trailing hyphens.
+- Proceed silently with the normalized value — do **not** announce the normalization to the user.
+  The normalized result will be visible in the done summary slug.
+
+**3. Check for empty slug (D-06):**
+If the normalized alias is empty (blank input, or input whose characters all normalize away):
+- On the **first empty attempt**: re-prompt with:
+  > `"Alias cannot be empty. Enter alias (e.g. 'cache' → ${SERVICE}-cache): _"`
+  Increment an empty-attempt counter; return to step 1 of this loop.
+- On the **second consecutive empty attempt**: output `"Nothing written. Exiting."` and stop.
+
+**4. Check alias ≠ service name (D-07):**
+If the normalized alias equals `${SERVICE}` (e.g. user typed `redis` for service `redis`):
+- Re-prompt with:
+  > `"Alias must differ from the service name. Enter alias (e.g. 'cache' → ${SERVICE}-cache): _"`
+  Reset the empty-attempt counter; return to step 1 of this loop.
+
+**5. Derive slug variables:**
+- `ALIAS=<normalized alias>`
+- `SERVICE_SLUG=${SERVICE}-${ALIAS}` (e.g. `redis-cache`)
+- `SERVICE_SNAKE=${SERVICE}_${ALIAS}` (e.g. `redis_cache`) — used for YAML keys, volumes, networks.
+- `ENV_PREFIX=<SERVICE_UPPER>_<ALIAS_UPPER>` (e.g. `REDIS_CACHE`) — used for env var names.
+
+**6. Check if alias slug already installed (D-08, D-09):**
+```bash
+test -f .devtools/${SERVICE_SLUG}/${SERVICE_SLUG}.compose.yml
+```
+- If file **exists**: re-prompt with:
+  > `"${SERVICE_SLUG} is already installed. Enter a different alias (or 'cancel'): _"`
+  Reset the empty-attempt counter; return to step 1 of this loop.
+- If file **does not exist**: set `MODE=alias` and continue to **Step 2**.
 
 ## Step 2: First-Run Setup
 
