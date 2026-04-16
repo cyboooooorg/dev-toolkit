@@ -1,18 +1,23 @@
 ---
 name: add-service
-description: "Add a Docker dev service to this project. Supported services: Redis, RabbitMQ, PostgreSQL, MySQL/MariaDB, MongoDB. Writes Docker Compose and Taskfile configs to .devtools/."
+description: "Add a Docker dev service to this project. Supported services: Redis, RabbitMQ, PostgreSQL, MySQL/MariaDB, MongoDB. Writes Docker Compose and Taskfile configs to .devtools/<service>/ (one subfolder per service instance)."
 argument-hint: "<service-name>"
 allowed-tools: Read, Write, Bash, AskUserQuestion
 ---
 
 <objective>
 Add a Docker development service to the current project by writing configuration files to
-`.devtools/`. Supported services: Redis, RabbitMQ, PostgreSQL, MySQL/MariaDB, MongoDB.
+`.devtools/<service>/`. Supported services: Redis, RabbitMQ, PostgreSQL, MySQL/MariaDB, MongoDB.
+
+Each service gets its own subdirectory under `.devtools/` containing its compose fragment,
+Taskfile, and per-service `.env` (credentials for that service only). Root `.devtools/.env`
+holds only project-level vars (`COMPOSE_PROJECT_NAME`, `COMPOSE_PROFILES`).
 
 The skill asks for port, image version, and credentials before writing anything. A
 configuration summary is shown for confirmation before any file is created. The skill is
-safe to re-run: it detects existing installs and either exits cleanly or installs a
-named second instance (alias). All credentials land in `.devtools/.env` which is gitignored.
+safe to re-run: it detects existing installs and either renames the existing instance (to free
+the slot), installs an aliased second instance, or exits cleanly. All credentials land in
+`.devtools/<service>/.env` which is gitignored via `**/.env` in `.devtools/.gitignore`.
 </objective>
 
 <context>
@@ -69,7 +74,7 @@ Determine the service name:
 
 Check whether the service is already installed:
 ```bash
-test -f .devtools/${SERVICE}.compose.yml
+test -f .devtools/${SERVICE}/${SERVICE}.compose.yml
 ```
 - If the file **does not exist** → continue to **Step 2**.
 - If the file **exists** → go to **Step 1a**.
@@ -78,7 +83,7 @@ test -f .devtools/${SERVICE}.compose.yml
 
 The service is already installed. Inform the user:
 
-> "`${SERVICE}` is already installed in `.devtools/`."
+> "`${SERVICE}` is already installed at `.devtools/${SERVICE}/`."
 
 Ask: `"Add another instance with an alias, or cancel? [alias/cancel]"`
 
@@ -90,7 +95,7 @@ Ask: `"Add another instance with an alias, or cancel? [alias/cancel]"`
   - Set `ENV_PREFIX=<SERVICE_UPPER>_<ALIAS_UPPER>` (e.g. `REDIS_CACHE`) — used for env var names.
   - Check if alias already installed:
     ```bash
-    test -f .devtools/${SERVICE_SLUG}.compose.yml
+    test -f .devtools/${SERVICE_SLUG}/${SERVICE_SLUG}.compose.yml
     ```
   - If file **exists** → output `"${SERVICE_SLUG} is already installed — nothing to do."` and stop. (MERGE-04)
   - If file **does not exist** → set `MODE=alias` and continue to **Step 3**.
@@ -115,7 +120,11 @@ test -d .devtools
   3. Write `.devtools/.gitignore` with exactly this content (do not add any other entries):
      ```
      .env
+     **/.env
      ```
+     This covers both the root `.devtools/.env` and all per-service `.devtools/<slug>/.env` files.
+     Do NOT attempt to migrate any existing flat `.devtools/*.compose.yml` files — new installs
+     always use the subfolder layout; old flat files continue to work as-is. (D-13: no migration)
   4. Ask: `"Project name for Docker namespacing? [default: <derive from git remote or pwd>]"`
      - Derive the default: run `basename $(git remote get-url origin 2>/dev/null || echo $(pwd)) | sed 's/\.git$//'`
      - Set `COMPOSE_PROJECT_NAME=<user answer or default>`.
