@@ -80,6 +80,7 @@ Recent decisions affecting current work:
 - Phase 4 added: Subfolder Output Structure — Per-service subdirectory layout in .devtools/
 - Phase 4 planned: 3 plans (04-01, 04-02, 04-03), 18 decisions covered, 0 blockers — ready for execution
 - Phase 4 complete: subfolder layout + rename-before-add flow shipped; 2 code review fixes applied (HR-01, MR-01)
+- Phase 5 added: New Instance Alias Prompt — Ask user for alias when installing into an existing service slot
 
 ### Pending Todos
 

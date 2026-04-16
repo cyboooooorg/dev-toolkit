@@ -89,3 +89,13 @@ Plans:
 - [x] 04-01-PLAN.md — Frontmatter/objective update, Step 1/1a detection paths, Step 2 .gitignore, Step 8 summary, Step 9 subfolder write paths with mkdir (D-11, D-12, D-13, D-14, D-01–D-04)
 - [x] 04-02-PLAN.md — Step 10 .env split (per-service subfolder vs minimal root), Step 11 include path updates, root Taskfile template paths (D-05–D-10)
 - [x] 04-03-PLAN.md — Step 1a rename-before-add flow, Step 13 done summary, success_criteria (D-15–D-18)
+
+### Phase 5: New Instance Alias Prompt — Ask user for alias when installing into an existing service slot
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 4
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 5 to break down)
