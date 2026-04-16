@@ -12,22 +12,22 @@ version: "3"
 
 includes:
   redis:
-    taskfile: ./redis.Taskfile.yml
+    taskfile: redis/redis.Taskfile.yml
     optional: true # Silently ignored if Redis is not installed
   rabbitmq:
-    taskfile: ./rabbitmq.Taskfile.yml
+    taskfile: rabbitmq/rabbitmq.Taskfile.yml
     optional: true
   postgres:
-    taskfile: ./postgres.Taskfile.yml
+    taskfile: postgres/postgres.Taskfile.yml
     optional: true
   mysql:
-    taskfile: ./mysql.Taskfile.yml
+    taskfile: mysql/mysql.Taskfile.yml
     optional: true
   mongodb:
-    taskfile: ./mongodb.Taskfile.yml
+    taskfile: mongodb/mongodb.Taskfile.yml
     optional: true
   monitoring:
-    taskfile: ./monitoring.Taskfile.yml
+    taskfile: monitoring/monitoring.Taskfile.yml
     optional: true
 
 tasks:

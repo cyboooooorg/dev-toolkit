@@ -482,16 +482,19 @@ Create `.devtools/compose.yml` with this content:
 # Do not edit manually; run the skill to add or remove services.
 
 include:
-  - ./<filename>.compose.yml
+  - path: <slug>/<filename>.compose.yml
 ```
-Where `<filename>` is `${SERVICE}` (standard) or `${SERVICE_SLUG}` (alias).
+Where `<slug>/<filename>` is `redis/redis` (standard) or `redis-cache/redis-cache` (alias).
+The `path:` key is used for explicitness; bare list entries are also valid Docker Compose v2.
+(D-09)
 
 **If it DOES exist (subsequent service install):**
 Read the file, locate the `include:` block, and append a new line:
 ```yaml
-  - ./<filename>.compose.yml
+  - path: <slug>/<filename>.compose.yml
 ```
-Do NOT rewrite the entire file — only add the new entry.
+Where `<slug>/<filename>` is `redis/redis` (standard) or `redis-cache/redis-cache` (alias).
+Do NOT rewrite the entire file — only add the new entry. (D-09)
 
 ### 11b: Root Taskfile (.devtools/Taskfile.yml)
 
@@ -506,12 +509,18 @@ curl -fsSL "${SKILL_RAW_BASE}/taskfile-templates/root/Taskfile.yml"
 ```
 Write the fetched content verbatim to `.devtools/Taskfile.yml`.
 
-**If it DOES exist:** Do NOT overwrite it. The root Taskfile template already contains
-`optional: true` for all 6 service includes — missing service files are silently skipped
-at runtime. No append is needed.
+**If it DOES exist:** Do NOT overwrite it. The root Taskfile template contains
+`optional: true` for all 6 service includes using subfolder-relative paths (e.g.
+`redis/redis.Taskfile.yml`) — missing service files are silently skipped at runtime.
+No append is needed for the Taskfile. (D-10)
 
 **Important:** Never overwrite an existing `.devtools/Taskfile.yml`. Users may have
 customized it. The `optional: true` pattern makes per-install updates unnecessary.
+
+**Root file locations (D-08):** `.devtools/compose.yml`, `.devtools/Taskfile.yml`,
+`.devtools/.gitignore`, and `.devtools/.env` all remain at the `.devtools/` root —
+their locations do not change with the subfolder layout. Only per-service files
+move into subfolders.
 
 ## Step 12: Alias Substitution (alias installs only)
 
