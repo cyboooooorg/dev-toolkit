@@ -665,13 +665,22 @@ Output a completion summary:
 
 List every file actually written (skip files that were skipped):
 ```
-  .devtools/.gitignore              (first install)
-  .devtools/redis.compose.yml       (or redis-cache.compose.yml for alias)
-  .devtools/redis.Taskfile.yml      (if Taskfile=yes)
-  .devtools/compose.yml             (created or updated)
-  .devtools/Taskfile.yml            (if first install)
-  .devtools/.env                    (appended)
-  .devtools/.env.example            (appended)
+  .devtools/.gitignore                           (first install)
+  .devtools/redis/redis.compose.yml              (or .devtools/redis-cache/redis-cache.compose.yml for alias)
+  .devtools/redis/redis.Taskfile.yml             (if Taskfile=yes)
+  .devtools/redis/.env                           (service credentials)
+  .devtools/compose.yml                          (created or updated include entry)
+  .devtools/Taskfile.yml                         (if first install)
+  .devtools/.env                                 (COMPOSE_PROJECT_NAME + COMPOSE_PROFILES, first install only)
+  .devtools/.env.example                         (updated, first install only)
+```
+
+If the install was preceded by a rename (Branch A of Step 1a), also list:
+```
+  .devtools/${RENAME_SLUG}/ (folder renamed from .devtools/${SERVICE}/)
+  .devtools/${RENAME_SLUG}/${RENAME_SLUG}.compose.yml  (renamed + substituted)
+  .devtools/${RENAME_SLUG}/${RENAME_SLUG}.Taskfile.yml (renamed + substituted, if existed)
+  .devtools/${RENAME_SLUG}/.env                        (env keys renamed with ## REPLACED markers)
 ```
 
 Next steps:
@@ -687,30 +696,34 @@ If the service was installed with an alias, show the aliased task names:
   Start service:    task redis-cache:up
 ```
 
-If any `## REPLACED` conflicts were found in `.devtools/.env`, add a warning:
+If any `## REPLACED` conflicts were found in `.devtools/${SERVICE_SLUG}/.env`, add a warning:
 ```
-⚠ Warning: The following keys were already present in .devtools/.env and have been replaced:
+⚠ Warning: The following keys were already present in .devtools/${SERVICE_SLUG}/.env and have been replaced:
   - REDIS_PORT  (old value marked ## REPLACED)
-Review .devtools/.env if this is unexpected.
+Review .devtools/${SERVICE_SLUG}/.env if this is unexpected.
 ```
 
 Always add the reminder:
 ```
-⚠ Do not commit .devtools/.env — it contains real credentials.
-   .devtools/.gitignore already excludes it.
+⚠ Do not commit .devtools/<service>/.env (or any .devtools/*/.env) — they contain real credentials.
+   .devtools/.gitignore already excludes them.
 ```
 
 </process>
 
 <success_criteria>
-- Service compose file exists at `.devtools/<service>.compose.yml` (or `<service>-<alias>.compose.yml`)
-- Service Taskfile exists at `.devtools/<service>.Taskfile.yml` (if Taskfile=yes)
-- `.devtools/.env` contains all service env vars with real values
-- `.devtools/.env.example` contains all service env var names with dummy/placeholder values
-- `.devtools/.gitignore` exists and contains `.env`
-- `.devtools/compose.yml` exists and includes the new service's compose file
+- Service compose file exists at `.devtools/<service>/<service>.compose.yml`
+  (or `.devtools/<service>-<alias>/<service>-<alias>.compose.yml` for alias installs)
+- Service Taskfile exists at `.devtools/<service>/<service>.Taskfile.yml` (if Taskfile=yes)
+- `.devtools/<service>/.env` contains service credentials and config vars with real values
+- `.devtools/.env` contains only `COMPOSE_PROJECT_NAME` and `COMPOSE_PROFILES` (no service vars)
+- `.devtools/.gitignore` exists and contains both `.env` and `**/.env`
+- `.devtools/compose.yml` exists and includes the new service's compose file as
+  `redis/redis.compose.yml` (subfolder-relative path, no leading `./`)
 - `.devtools/Taskfile.yml` exists (created or pre-existing)
 - `task <service>:up` starts the service successfully
-- Re-running the skill for the same service asks alias-or-cancel (no silent overwrite)
+- Re-running the skill for the same service offers rename-first, then alias-or-cancel (no silent overwrite)
 - Re-running with an identical alias produces "already installed — nothing to do"
+- After a rename, `.devtools/${RENAME_SLUG}/` exists with renamed files and updated env keys;
+  `.devtools/${SERVICE}/` no longer exists; `.devtools/compose.yml` and `Taskfile.yml` reference the renamed paths
 </success_criteria>
