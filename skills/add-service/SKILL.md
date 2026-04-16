@@ -76,7 +76,28 @@ Check whether the service is already installed:
 ```bash
 test -f .devtools/${SERVICE}/${SERVICE}.compose.yml
 ```
-- If the file **does not exist** → continue to **Step 2**.
+- If the file **does not exist** → offer the optional alias prompt before proceeding (D-10–D-13):
+
+  Ask:
+  > `"Install with a custom alias? (optional — press Enter to install as '${SERVICE}'): _"`
+
+  - **If the user presses Enter (no input):** Set `MODE=standard`. continue to **Step 2**. (D-11)
+
+  - **If the user provides an alias:** Apply the same normalization and validation sequence
+    used in Branch B of Step 1a (steps 2–4 of that loop):
+    1. Normalize: lowercase, replace non-`[a-z0-9-]` with hyphens, collapse, trim.
+    2. If empty after normalization: re-prompt once with
+       `"Alias cannot be empty. Enter alias (e.g. 'cache' → ${SERVICE}-cache): _"`;
+       if empty again: output `"Nothing written. Exiting."` and stop.
+    3. If alias equals `${SERVICE}`: re-prompt with
+       `"Alias must differ from the service name. Enter alias (e.g. 'cache' → ${SERVICE}-cache): _"`.
+
+    On valid alias: set `ALIAS=<normalized>`, `SERVICE_SLUG=${SERVICE}-${ALIAS}`,
+    `SERVICE_SNAKE=${SERVICE}_${ALIAS}`, `ENV_PREFIX=<SERVICE_UPPER>_<ALIAS_UPPER>`,
+    `MODE=alias`. continue to **Step 2**. (D-12)
+
+    *(No conflict check is needed here — the slot was just confirmed free by the `test -f`
+    check above.)* (D-13: alias is locked before Step 5 Q&A)
 - If the file **exists** → go to **Step 1a**.
 
 ## Step 1a: Merge Detection — Rename-Before-Add Flow
