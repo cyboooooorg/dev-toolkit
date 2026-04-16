@@ -722,7 +722,7 @@ hyphen (`redis-cache`) — that is correct and expected.
 ### Taskfile substitutions
 
 Replace all references to the compose filename and service name within task commands:
-- `${SERVICE}.compose.yml` → `${SERVICE_SLUG}.compose.yml`
+- `.devtools/${SERVICE}/${SERVICE}.compose.yml` → `.devtools/${SERVICE_SLUG}/${SERVICE_SLUG}.compose.yml`
 - `logs -f ${SERVICE}` → `logs -f ${SERVICE_SNAKE}`
 - `restart ${SERVICE}` → `restart ${SERVICE_SNAKE}`
 
