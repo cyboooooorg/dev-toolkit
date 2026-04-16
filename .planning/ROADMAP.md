@@ -113,7 +113,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 06-01-PLAN.md — Fix per-service Taskfile templates (Break 1) + SKILL.md Step 11b alias include append (Break 3) + Step 12 path substitution (Break 2) + REDIS_UI_PORT Q&A and env write (Gap 1)
+- [x] 06-01-PLAN.md — Fix per-service Taskfile templates (Break 1) + SKILL.md Step 11b alias include append (Break 3) + Step 12 path substitution (Break 2) + REDIS_UI_PORT Q&A and env write (Gap 1)
 
 ### Phase 7: Fix MERGE-04 Idempotency UX
 

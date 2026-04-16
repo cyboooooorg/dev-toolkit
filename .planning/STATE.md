@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Phase 5 context gathered
-last_updated: "2026-04-16T15:02:23.614Z"
-last_activity: 2026-04-16 -- Phase 06 planning complete
+status: verifying
+stopped_at: Completed 06-01-PLAN.md
+last_updated: "2026-04-16T15:26:12.922Z"
+last_activity: 2026-04-16
 progress:
   total_phases: 7
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 13
-  completed_plans: 12
-  percent: 92
+  completed_plans: 13
+  percent: 100
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-10)
 
 **Core value:** An AI can drop production-ready Docker service configs and Taskfiles into any project in one conversation, with zero manual file writing.
-**Current focus:** Phase 05 — new-instance-alias-prompt-ask-user-for-alias-when-installing
+**Current focus:** Phase 06 — fix-taskfile-integration-and-ui-port-gap
 
 ## Current Position
 
-Phase: 05 (new-instance-alias-prompt-ask-user-for-alias-when-installing) — COMPLETE
+Phase: 06 (fix-taskfile-integration-and-ui-port-gap) — EXECUTING
 Plan: 1 of 1
-Status: Ready to execute
-Last activity: 2026-04-16 -- Phase 06 planning complete
+Status: Phase complete — ready for verification
+Last activity: 2026-04-16
 
 Progress: [██████████] 100%
 
@@ -58,6 +58,7 @@ Progress: [██████████] 100%
 | Phase 01-templates-credential-foundation P01-03 | 10m | 2 tasks | 1 files |
 | Phase 03 P01 | 5 | 1 tasks | 0 files |
 | Phase 03 P02 | 5 | 1 tasks | 1 files |
+| Phase 06 P06-01 | 63075546 | 4 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -74,6 +75,8 @@ Recent decisions affecting current work:
 - [Phase 01-templates-credential-foundation]: COMPOSE_PROFILES=services set as default in .env.example — all services start by default
 - [Phase 03]: SKILL.md frontmatter valid — no changes required; DIST-01 satisfied via skills.sh, not manual symlinks
 - [Phase 03]: Root Taskfile.yml is NOT modified by skill — users manually add includes entry
+- [Phase 06]: All Taskfile templates now reference .devtools/<service>/<service>.compose.yml matching Phase 4 subfolder layout
+- [Phase 06]: Alias installs require explicit includes entry append to .devtools/Taskfile.yml — optional:true only covers 6 base services
 
 ### Roadmap Evolution
 
@@ -93,6 +96,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-16T13:12:56.441Z
-Stopped at: Phase 5 context gathered
-Resume file: .planning/phases/05-new-instance-alias-prompt-ask-user-for-alias-when-installing/05-CONTEXT.md
+Last session: 2026-04-16T15:26:12.912Z
+Stopped at: Completed 06-01-PLAN.md
+Resume file: None
