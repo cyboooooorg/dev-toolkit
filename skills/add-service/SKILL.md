@@ -352,9 +352,10 @@ This ensures `compose.yml` never references a file that failed to write.
 
 ## Step 10: .env Management
 
-### 10a: Write .devtools/.env
+### 10a: Write per-service .devtools/${SERVICE_SLUG}/.env  (D-05)
 
-Append a section block to `.devtools/.env` (create the file if it does not exist):
+The service subdirectory was created by `mkdir -p` in Step 9a. Write service credentials
+and config to `.devtools/${SERVICE_SLUG}/.env` (create if not exists, append if exists):
 
 ```
 # ── <SERVICE> ───────────────────────────────────────
@@ -364,8 +365,8 @@ Append a section block to `.devtools/.env` (create the file if it does not exist
 
 For **standard** install — env var names from metadata `env_var` field:
 
-| Service | Env vars to append |
-|---------|-------------------|
+| Service | Env vars to write |
+|---------|------------------|
 | redis | REDIS_PORT, REDIS_VERSION, REDIS_PASSWORD (empty string if skipped) |
 | rabbitmq | RABBITMQ_PORT, RABBITMQ_VERSION, RABBITMQ_USERNAME, RABBITMQ_PASSWORD, RABBITMQ_UI_PORT |
 | postgres | POSTGRES_PORT, POSTGRES_VERSION, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_UI_PORT (if UI enabled), PGADMIN_DEFAULT_EMAIL (if UI enabled), PGADMIN_DEFAULT_PASSWORD (if UI enabled) |
@@ -375,89 +376,97 @@ For **standard** install — env var names from metadata `env_var` field:
 For **alias** install — prefix all env var names with `ENV_PREFIX_`:
 e.g. `REDIS_CACHE_PORT`, `REDIS_CACHE_VERSION`, `REDIS_CACHE_PASSWORD`, etc.
 
-**Conflict detection (D-13):** Before appending each key, check if the key already exists
-in `.devtools/.env`. If it does:
+**Conflict detection:** Before appending each key, check if the key already exists in
+`.devtools/${SERVICE_SLUG}/.env`. If it does:
 - Mark the old line: append ` ## REPLACED` as an inline comment on that line.
 - Append the new value on the next line.
 - Record the conflict in a warnings list for the done summary.
 
-If `COMPOSE_PROJECT_NAME` is not yet in `.devtools/.env`, prepend it as the very first entry.
-Immediately after `COMPOSE_PROJECT_NAME`, if `COMPOSE_PROFILES` is not yet in `.devtools/.env`,
-add it on the next line:
+**Why per-service subfolder, not root .devtools/.env?** (D-05/D-06)
+Credentials belong to their service. Deleting `.devtools/redis/` removes Redis completely —
+including its credentials — without touching other services. The root `.devtools/.env` stays
+minimal (project-level vars only), making it safe to inspect without risk of leaking service creds.
+
+### 10a-root: Write root .devtools/.env (project-level vars only)  (D-06)
+
+The root `.devtools/.env` holds ONLY project-level vars that Docker Compose needs when
+running the root `compose.yml`. Write these on first install only (skip if already present):
 
 ```
 COMPOSE_PROJECT_NAME=<value>
 COMPOSE_PROFILES=services
 ```
 
-`COMPOSE_PROFILES=services` ensures `docker compose up` (with no `--profile` flag) starts
-the core service containers. Without it the default profile is empty and all containers are
-skipped. Never overwrite an existing `COMPOSE_PROFILES` entry — the user may have added `ui`
-or `monitoring` to it.
+- If `COMPOSE_PROJECT_NAME` is not yet in `.devtools/.env`, prepend it as the very first entry.
+- Immediately after, if `COMPOSE_PROFILES` is not yet in `.devtools/.env`, add it.
+- `COMPOSE_PROFILES=services` ensures `docker compose up` starts core service containers.
+  Without it the default profile is empty and all containers are skipped.
+- Never overwrite an existing `COMPOSE_PROFILES` entry — the user may have added `ui`
+  or `monitoring` to it.
+- Do NOT write any service credentials or ports to root `.devtools/.env`.
 
-### 10b: Write .devtools/.env.example
+### 10b: Write .devtools/.env.example  (D-06, D-08)
 
-Append the same keys to `.devtools/.env.example` (create if not exists) with **dummy/placeholder
-values only** — never real credentials:
+The root `.devtools/.env.example` documents the project-level structure only. Update it on
+first install (skip if `COMPOSE_PROJECT_NAME` is already present):
 
 ```
-# ── <SERVICE> ───────────────────────────────────────
-REDIS_PORT=6379
-REDIS_VERSION=7
-REDIS_PASSWORD=CHANGE_ME
-REDIS_UI_PORT=5540
-```
-
-On the first service install, also add to `.devtools/.env.example`:
-```
+# .devtools/.env — project-level vars (safe to inspect; do NOT commit per-service .env files)
 COMPOSE_PROJECT_NAME=myapp
 COMPOSE_PROFILES=services
+
+# Per-service credentials live in their service subfolders:
+#   .devtools/redis/.env       — Redis credentials
+#   .devtools/postgres/.env    — PostgreSQL credentials
+#   .devtools/rabbitmq/.env    — RabbitMQ credentials
+#   .devtools/mysql/.env       — MySQL credentials
+#   .devtools/mongodb/.env     — MongoDB credentials
+# All subfolder .env files are gitignored via **/.env in .devtools/.gitignore
 ```
 
-Use obvious placeholder strings for credentials: `CHANGE_ME`, `admin@example.com`, etc.
+Do NOT append per-service credential keys to `.devtools/.env.example`. Per-service vars are
+self-documenting in `.devtools/${SERVICE_SLUG}/.env` which the skill creates.
 
 ### 10c: Monitoring .env (if ANSWERS[monitoring]=true)
 
-Append to `.devtools/.env`:
+Write monitoring credentials to `.devtools/monitoring/.env`
+(the `mkdir -p .devtools/monitoring` will be run in Step 10d before writing these):
+
 ```
 # ── Monitoring ──────────────────────────────────────
 GRAFANA_ADMIN_USER=admin
 GRAFANA_ADMIN_PASSWORD=<ANSWERS[grafana_password]>
 ```
 
-Apply conflict detection (D-13) for `GRAFANA_ADMIN_USER` and `GRAFANA_ADMIN_PASSWORD`.
-
-Append to `.devtools/.env.example` (dummy values only):
-```
-# ── Monitoring ──────────────────────────────────────
-GRAFANA_ADMIN_USER=admin
-GRAFANA_ADMIN_PASSWORD=CHANGE_ME
-```
+Apply conflict detection for `GRAFANA_ADMIN_USER` and `GRAFANA_ADMIN_PASSWORD` within
+`.devtools/monitoring/.env`. Do NOT write monitoring vars to root `.devtools/.env`.
 
 ### 10d: Monitoring files (if ANSWERS[monitoring]=true)
 
 Copy monitoring templates verbatim (no token substitution needed):
 
-1. Fetch and write the compose template:
+1. Create monitoring subfolder and write the compose template:
    ```bash
+   mkdir -p .devtools/monitoring
    curl -fsSL "${SKILL_RAW_BASE}/compose-templates/monitoring/monitoring.compose.yml"
    ```
-   Write fetched content to `.devtools/monitoring.compose.yml` in the target project.
+   Write fetched content to `.devtools/monitoring/monitoring.compose.yml`.
+   Then write `.devtools/monitoring/.env` as specified in Step 10c.
 
 2. If `ANSWERS[taskfile]=true`, fetch and write the Taskfile:
    ```bash
    curl -fsSL "${SKILL_RAW_BASE}/taskfile-templates/monitoring/monitoring.Taskfile.yml"
    ```
-   Write fetched content to `.devtools/monitoring.Taskfile.yml` in the target project.
+   Write fetched content to `.devtools/monitoring/monitoring.Taskfile.yml`.
 
-3. After writing `monitoring.compose.yml` (step 1 above), update `.devtools/compose.yml`
+3. After writing `monitoring/monitoring.compose.yml` (step 1 above), update `.devtools/compose.yml`
    to add the monitoring include (using the same create-or-append logic as Step 11a):
    ```yaml
-     - ./monitoring.compose.yml
+     - monitoring/monitoring.compose.yml
    ```
 
-**Important:** Write `monitoring.compose.yml` before updating `compose.yml` include —
-same write-order rule as Step 9 (Pitfall 6).
+**Important:** Write `monitoring/monitoring.compose.yml` before updating `compose.yml` include —
+same write-order rule as Step 9.
 
 ## Step 11: Root File Management
 
