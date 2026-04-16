@@ -388,8 +388,9 @@ Ask: `"Enable UI companion? [y/N]"` (default: N)
     Ask: `"Mongo Express username? [default: admin]"` → `ANSWERS[me_username]`
     Ask: `"Mongo Express password? (required)"` → `ANSWERS[me_password]` (re-ask if blank)
 
-  #### redis (RedisInsight — no extra credentials needed)
+  #### redis (RedisInsight)
   *(RedisInsight authenticates via the Redis password already captured in Step 5.)*
+  Ask: `"RedisInsight UI port? [default: 8001]"` → `ANSWERS[ui_port]`
 
 ## Step 7: Optional Feature Prompts
 
@@ -514,7 +515,7 @@ For **standard** install — env var names from metadata `env_var` field:
 
 | Service | Env vars to write |
 |---------|------------------|
-| redis | REDIS_PORT, REDIS_VERSION, REDIS_PASSWORD (empty string if skipped) |
+| redis | REDIS_PORT, REDIS_VERSION, REDIS_PASSWORD (empty string if skipped), REDIS_UI_PORT (if `ANSWERS[ui_enabled]=true`) |
 | rabbitmq | RABBITMQ_PORT, RABBITMQ_VERSION, RABBITMQ_USERNAME, RABBITMQ_PASSWORD, RABBITMQ_UI_PORT |
 | postgres | POSTGRES_PORT, POSTGRES_VERSION, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_UI_PORT (if UI enabled), PGADMIN_DEFAULT_EMAIL (if UI enabled), PGADMIN_DEFAULT_PASSWORD (if UI enabled) |
 | mysql | MYSQL_PORT, MYSQL_VERSION, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE, MYSQL_ROOT_PASSWORD, MYSQL_UI_PORT (if UI enabled) |
