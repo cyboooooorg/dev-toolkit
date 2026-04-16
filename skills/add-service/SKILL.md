@@ -661,6 +661,23 @@ Write the fetched content verbatim to `.devtools/Taskfile.yml`.
 `redis/redis.Taskfile.yml`) — missing service files are silently skipped at runtime.
 No append is needed for the Taskfile. (D-10)
 
+**Exception — alias installs:** When `MODE=alias`, the `optional: true` pattern does NOT
+cover the alias name (only the 6 base service names are pre-included). After writing the
+alias Taskfile to `.devtools/${SERVICE_SLUG}/${SERVICE_SLUG}.Taskfile.yml`, append a new
+`includes:` entry to `.devtools/Taskfile.yml`:
+
+Locate the `includes:` block in `.devtools/Taskfile.yml` and append (using 2-space indent
+to match the existing entries):
+
+```yaml
+  ${SERVICE_SLUG}:
+    taskfile: ${SERVICE_SLUG}/${SERVICE_SLUG}.Taskfile.yml
+    optional: true
+```
+
+Where `${SERVICE_SLUG}` is the alias slug (e.g. `redis-cache`). This makes
+`task redis-cache:up` reachable. (D-10 alias extension)
+
 **Important:** Never overwrite an existing `.devtools/Taskfile.yml`. Users may have
 customized it. The `optional: true` pattern makes per-install updates unnecessary.
 
