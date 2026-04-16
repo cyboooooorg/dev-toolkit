@@ -1,5 +1,5 @@
 # Monitoring Taskfile template (Prometheus + Grafana)
-# Installed to: .devtools/monitoring.Taskfile.yml
+# Installed to: .devtools/monitoring/monitoring.Taskfile.yml
 # Included by: .devtools/Taskfile.yml as namespace 'monitoring'
 # Usage: task monitoring:up | task monitoring:down | task monitoring:logs
 # Note: monitoring profile must be active — this task passes --profile monitoring explicitly
@@ -11,24 +11,24 @@ tasks:
   up:
     desc: Start Prometheus + Grafana monitoring stack
     cmds:
-      - docker compose -f .devtools/monitoring.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f .devtools/monitoring/monitoring.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop Prometheus + Grafana
     cmds:
-      - docker compose -f .devtools/monitoring.compose.yml down
+      - docker compose -f .devtools/monitoring/monitoring.compose.yml down
 
   logs:
     desc: Follow Prometheus logs (use monitoring:logs-grafana for Grafana)
     cmds:
-      - docker compose -f .devtools/monitoring.compose.yml logs -f prometheus
+      - docker compose -f .devtools/monitoring/monitoring.compose.yml logs -f prometheus
 
   logs-grafana:
     desc: Follow Grafana logs
     cmds:
-      - docker compose -f .devtools/monitoring.compose.yml logs -f grafana
+      - docker compose -f .devtools/monitoring/monitoring.compose.yml logs -f grafana
 
   restart:
     desc: Restart Prometheus and Grafana containers
     cmds:
-      - docker compose -f .devtools/monitoring.compose.yml restart prometheus grafana
+      - docker compose -f .devtools/monitoring/monitoring.compose.yml restart prometheus grafana

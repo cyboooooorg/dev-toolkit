@@ -1,5 +1,5 @@
 # PostgreSQL Taskfile template
-# Installed to: .devtools/postgres.Taskfile.yml
+# Installed to: .devtools/postgres/postgres.Taskfile.yml
 # Included by: .devtools/Taskfile.yml as namespace 'postgres'
 # Usage: task postgres:up | task postgres:down | task postgres:logs | task postgres:restart
 
@@ -10,29 +10,29 @@ tasks:
   up:
     desc: Start PostgreSQL (requires COMPOSE_PROFILES=services in .devtools/.env)
     cmds:
-      - docker compose -f .devtools/postgres.compose.yml up -d --remove-orphans
+      - docker compose -f .devtools/postgres/postgres.compose.yml up -d --remove-orphans
 
   up-ui:
     desc: Start PostgreSQL + pgAdmin UI on POSTGRES_UI_PORT (adds ui profile)
     cmds:
-      - docker compose -f .devtools/postgres.compose.yml --profile ui up -d --remove-orphans
+      - docker compose -f .devtools/postgres/postgres.compose.yml --profile ui up -d --remove-orphans
 
   up-monitoring:
     desc: Start PostgreSQL + postgres_exporter (adds monitoring profile)
     cmds:
-      - docker compose -f .devtools/postgres.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f .devtools/postgres/postgres.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop PostgreSQL and all its companions
     cmds:
-      - docker compose -f .devtools/postgres.compose.yml down
+      - docker compose -f .devtools/postgres/postgres.compose.yml down
 
   logs:
     desc: Follow PostgreSQL container logs
     cmds:
-      - docker compose -f .devtools/postgres.compose.yml logs -f postgres
+      - docker compose -f .devtools/postgres/postgres.compose.yml logs -f postgres
 
   restart:
     desc: Restart PostgreSQL container
     cmds:
-      - docker compose -f .devtools/postgres.compose.yml restart postgres
+      - docker compose -f .devtools/postgres/postgres.compose.yml restart postgres

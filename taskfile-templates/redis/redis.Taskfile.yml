@@ -1,5 +1,5 @@
 # Redis Taskfile template
-# Installed to: .devtools/redis.Taskfile.yml
+# Installed to: .devtools/redis/redis.Taskfile.yml
 # Included by: .devtools/Taskfile.yml as namespace 'redis'
 # Usage: task redis:up | task redis:down | task redis:logs | task redis:restart
 # Tasks always run from project root — compose files referenced as .devtools/<file>
@@ -11,29 +11,29 @@ tasks:
   up:
     desc: Start Redis (main service — requires COMPOSE_PROFILES=services in .devtools/.env)
     cmds:
-      - docker compose -f .devtools/redis.compose.yml up -d --remove-orphans
+      - docker compose -f .devtools/redis/redis.compose.yml up -d --remove-orphans
 
   up-ui:
     desc: Start Redis + RedisInsight UI (adds ui profile)
     cmds:
-      - docker compose -f .devtools/redis.compose.yml --profile ui up -d --remove-orphans
+      - docker compose -f .devtools/redis/redis.compose.yml --profile ui up -d --remove-orphans
 
   up-monitoring:
     desc: Start Redis + metrics exporter (adds monitoring profile)
     cmds:
-      - docker compose -f .devtools/redis.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f .devtools/redis/redis.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop Redis and all its companions
     cmds:
-      - docker compose -f .devtools/redis.compose.yml down
+      - docker compose -f .devtools/redis/redis.compose.yml down
 
   logs:
     desc: Follow Redis container logs
     cmds:
-      - docker compose -f .devtools/redis.compose.yml logs -f redis
+      - docker compose -f .devtools/redis/redis.compose.yml logs -f redis
 
   restart:
     desc: Restart Redis container
     cmds:
-      - docker compose -f .devtools/redis.compose.yml restart redis
+      - docker compose -f .devtools/redis/redis.compose.yml restart redis

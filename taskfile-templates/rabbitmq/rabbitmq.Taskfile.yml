@@ -1,5 +1,5 @@
 # RabbitMQ Taskfile template
-# Installed to: .devtools/rabbitmq.Taskfile.yml
+# Installed to: .devtools/rabbitmq/rabbitmq.Taskfile.yml
 # Included by: .devtools/Taskfile.yml as namespace 'rabbitmq'
 # Usage: task rabbitmq:up | task rabbitmq:down | task rabbitmq:logs | task rabbitmq:restart
 # Management UI is always-on (bundled in management image) — no separate up-ui needed
@@ -12,29 +12,29 @@ tasks:
   up:
     desc: Start RabbitMQ with management UI on RABBITMQ_UI_PORT (requires COMPOSE_PROFILES=services in .env)
     cmds:
-      - docker compose -f .devtools/rabbitmq.compose.yml up -d --remove-orphans
+      - docker compose -f .devtools/rabbitmq/rabbitmq.compose.yml up -d --remove-orphans
 
   up-ui:
     desc: Start RabbitMQ (management UI is bundled — this is equivalent to up)
     cmds:
-      - docker compose -f .devtools/rabbitmq.compose.yml up -d --remove-orphans
+      - docker compose -f .devtools/rabbitmq/rabbitmq.compose.yml up -d --remove-orphans
 
   up-monitoring:
     desc: Start RabbitMQ + metrics exporter (adds monitoring profile)
     cmds:
-      - docker compose -f .devtools/rabbitmq.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f .devtools/rabbitmq/rabbitmq.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop RabbitMQ and all its companions
     cmds:
-      - docker compose -f .devtools/rabbitmq.compose.yml down
+      - docker compose -f .devtools/rabbitmq/rabbitmq.compose.yml down
 
   logs:
     desc: Follow RabbitMQ container logs
     cmds:
-      - docker compose -f .devtools/rabbitmq.compose.yml logs -f rabbitmq
+      - docker compose -f .devtools/rabbitmq/rabbitmq.compose.yml logs -f rabbitmq
 
   restart:
     desc: Restart RabbitMQ container
     cmds:
-      - docker compose -f .devtools/rabbitmq.compose.yml restart rabbitmq
+      - docker compose -f .devtools/rabbitmq/rabbitmq.compose.yml restart rabbitmq

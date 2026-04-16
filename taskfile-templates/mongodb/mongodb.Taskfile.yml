@@ -1,5 +1,5 @@
 # MongoDB Taskfile template
-# Installed to: .devtools/mongodb.Taskfile.yml
+# Installed to: .devtools/mongodb/mongodb.Taskfile.yml
 # Included by: .devtools/Taskfile.yml as namespace 'mongodb'
 # Usage: task mongodb:up | task mongodb:down | task mongodb:logs | task mongodb:restart
 
@@ -10,29 +10,29 @@ tasks:
   up:
     desc: Start MongoDB (requires COMPOSE_PROFILES=services in .devtools/.env)
     cmds:
-      - docker compose -f .devtools/mongodb.compose.yml up -d --remove-orphans
+      - docker compose -f .devtools/mongodb/mongodb.compose.yml up -d --remove-orphans
 
   up-ui:
     desc: Start MongoDB + Mongo Express UI on MONGODB_UI_PORT (adds ui profile)
     cmds:
-      - docker compose -f .devtools/mongodb.compose.yml --profile ui up -d --remove-orphans
+      - docker compose -f .devtools/mongodb/mongodb.compose.yml --profile ui up -d --remove-orphans
 
   up-monitoring:
     desc: Start MongoDB + mongodb_exporter (adds monitoring profile)
     cmds:
-      - docker compose -f .devtools/mongodb.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f .devtools/mongodb/mongodb.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop MongoDB and all its companions
     cmds:
-      - docker compose -f .devtools/mongodb.compose.yml down
+      - docker compose -f .devtools/mongodb/mongodb.compose.yml down
 
   logs:
     desc: Follow MongoDB container logs
     cmds:
-      - docker compose -f .devtools/mongodb.compose.yml logs -f mongodb
+      - docker compose -f .devtools/mongodb/mongodb.compose.yml logs -f mongodb
 
   restart:
     desc: Restart MongoDB container
     cmds:
-      - docker compose -f .devtools/mongodb.compose.yml restart mongodb
+      - docker compose -f .devtools/mongodb/mongodb.compose.yml restart mongodb

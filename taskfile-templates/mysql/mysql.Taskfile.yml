@@ -1,5 +1,5 @@
 # MySQL / MariaDB Taskfile template
-# Installed to: .devtools/mysql.Taskfile.yml
+# Installed to: .devtools/mysql/mysql.Taskfile.yml
 # Included by: .devtools/Taskfile.yml as namespace 'mysql'
 # Usage: task mysql:up | task mysql:down | task mysql:logs | task mysql:restart
 # Works for both mariadb:11 (default) and mysql:8 (opt-in) — same service name 'mysql'
@@ -11,29 +11,29 @@ tasks:
   up:
     desc: Start MySQL/MariaDB (requires COMPOSE_PROFILES=services in .devtools/.env)
     cmds:
-      - docker compose -f .devtools/mysql.compose.yml up -d --remove-orphans
+      - docker compose -f .devtools/mysql/mysql.compose.yml up -d --remove-orphans
 
   up-ui:
     desc: Start MySQL/MariaDB + phpMyAdmin UI on MYSQL_UI_PORT (adds ui profile)
     cmds:
-      - docker compose -f .devtools/mysql.compose.yml --profile ui up -d --remove-orphans
+      - docker compose -f .devtools/mysql/mysql.compose.yml --profile ui up -d --remove-orphans
 
   up-monitoring:
     desc: Start MySQL/MariaDB + mysqld_exporter (adds monitoring profile)
     cmds:
-      - docker compose -f .devtools/mysql.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f .devtools/mysql/mysql.compose.yml --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop MySQL/MariaDB and all its companions
     cmds:
-      - docker compose -f .devtools/mysql.compose.yml down
+      - docker compose -f .devtools/mysql/mysql.compose.yml down
 
   logs:
     desc: Follow MySQL/MariaDB container logs
     cmds:
-      - docker compose -f .devtools/mysql.compose.yml logs -f mysql
+      - docker compose -f .devtools/mysql/mysql.compose.yml logs -f mysql
 
   restart:
     desc: Restart MySQL/MariaDB container
     cmds:
-      - docker compose -f .devtools/mysql.compose.yml restart mysql
+      - docker compose -f .devtools/mysql/mysql.compose.yml restart mysql
