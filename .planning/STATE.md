@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 03-02-PLAN.md
-last_updated: "2026-04-14T08:58:19.572Z"
-last_activity: 2026-04-14
+status: complete
+stopped_at: Phase 4 complete — subfolder layout, rename-before-add flow, code review fixes applied
+last_updated: "2026-04-16T10:38:24.884Z"
+last_activity: 2026-04-16
 progress:
-  total_phases: 3
-  completed_phases: 3
-  total_plans: 8
-  completed_plans: 8
+  total_phases: 4
+  completed_phases: 4
+  total_plans: 11
+  completed_plans: 11
   percent: 100
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-10)
 
 **Core value:** An AI can drop production-ready Docker service configs and Taskfiles into any project in one conversation, with zero manual file writing.
-**Current focus:** Phase 02 — skill-core-interactive-flow-merge-logic
+**Current focus:** Phase 04 — subfolder-output-structure-per-service-subdirectory-layout-i
 
 ## Current Position
 
-Phase: 03
-Plan: Not started
-Status: Executing Phase 02
-Last activity: 2026-04-14
+Phase: 04 (subfolder-output-structure-per-service-subdirectory-layout-i) — EXECUTING
+Plan: 1 of 3
+Status: Executing Phase 04
+Last activity: 2026-04-16 -- Phase 04 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -74,6 +74,12 @@ Recent decisions affecting current work:
 - [Phase 01-templates-credential-foundation]: COMPOSE_PROFILES=services set as default in .env.example — all services start by default
 - [Phase 03]: SKILL.md frontmatter valid — no changes required; DIST-01 satisfied via skills.sh, not manual symlinks
 - [Phase 03]: Root Taskfile.yml is NOT modified by skill — users manually add includes entry
+
+### Roadmap Evolution
+
+- Phase 4 added: Subfolder Output Structure — Per-service subdirectory layout in .devtools/
+- Phase 4 planned: 3 plans (04-01, 04-02, 04-03), 18 decisions covered, 0 blockers — ready for execution
+- Phase 4 complete: subfolder layout + rename-before-add flow shipped; 2 code review fixes applied (HR-01, MR-01)
 
 ### Pending Todos
 
