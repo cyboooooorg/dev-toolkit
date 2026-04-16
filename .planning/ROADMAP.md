@@ -92,10 +92,10 @@ Plans:
 
 ### Phase 5: New Instance Alias Prompt — Ask user for alias when installing into an existing service slot
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Update `SKILL.md` with a full alias prompt UX: slug-preview prompt, silent normalization, empty/service-name validation, unlimited conflict re-prompt in Branch B; plus an optional proactive alias prompt on first install before the Q&A flow.
+**Requirements**: MERGE-02, MERGE-03, MERGE-04
 **Depends on:** Phase 4
-**Plans:** 0 plans
+**Plans:** 1 plan
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 5 to break down)
+- [ ] 05-01-PLAN.md — Rewrite Branch B alias validation loop (D-01–D-09) + insert proactive first-install alias prompt in Step 1 (D-10–D-13)
