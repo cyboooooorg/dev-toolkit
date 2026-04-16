@@ -106,6 +106,9 @@ If the user provides a non-empty rename suffix (e.g. `cache`):
 
 2. **Rename the folder:**
    ```bash
+   if [ -d ".devtools/${RENAME_SLUG}" ]; then
+     echo "Error: .devtools/${RENAME_SLUG} already exists. Choose a different alias." && exit 1
+   fi
    mv .devtools/${SERVICE} .devtools/${RENAME_SLUG}
    ```
 
@@ -399,7 +402,7 @@ curl -fsSL "${SKILL_RAW_BASE}/compose-templates/${SERVICE}/${SERVICE}.compose.ym
 string (user pressed enter to skip), after loading the template content:
 - Remove the `--requirepass ${REDIS_PASSWORD}` argument from the `command:` line.
 - Remove `-a "${REDIS_PASSWORD}"` from the `healthcheck.test` command.
-Write the modified content (not the raw template) to `.devtools/redis.compose.yml`.
+Apply these modifications to the in-memory content before writing (see write destination below).
 
 **For alias install (`MODE=alias`):** Before writing, perform all string substitutions in the
 file content — see **Step 12** for the complete substitution map. Apply substitutions to the
