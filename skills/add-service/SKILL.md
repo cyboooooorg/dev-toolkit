@@ -79,11 +79,105 @@ test -f .devtools/${SERVICE}/${SERVICE}.compose.yml
 - If the file **does not exist** → continue to **Step 2**.
 - If the file **exists** → go to **Step 1a**.
 
-## Step 1a: Merge Detection
+## Step 1a: Merge Detection — Rename-Before-Add Flow
 
 The service is already installed. Inform the user:
 
 > "`${SERVICE}` is already installed at `.devtools/${SERVICE}/`."
+
+**First, offer to rename the existing instance** (D-15). This lets the user free up the
+`${SERVICE}` slot for a fresh install, rather than being forced to install an alias:
+
+Ask:
+> `"Before adding a new instance, rename the existing '${SERVICE}' to free up the slot?
+>  Enter a rename suffix (e.g. 'cache' → renames to '${SERVICE}-cache'), or press Enter to skip: [skip]"`
+
+---
+
+### Branch A: User provides a rename suffix (D-16, D-17, D-18)
+
+If the user provides a non-empty rename suffix (e.g. `cache`):
+
+1. **Set rename variables:**
+   - `RENAME_ALIAS=<rename suffix>` (lowercase, letters/numbers/hyphens only)
+   - `RENAME_SLUG=${SERVICE}-${RENAME_ALIAS}` (e.g. `redis-cache`)
+   - `RENAME_SNAKE=${SERVICE}_${RENAME_ALIAS}` (e.g. `redis_cache`)
+   - `RENAME_PREFIX=<SERVICE_UPPER>_<RENAME_ALIAS_UPPER>` (e.g. `REDIS_CACHE`)
+
+2. **Rename the folder:**
+   ```bash
+   mv .devtools/${SERVICE} .devtools/${RENAME_SLUG}
+   ```
+
+3. **Rename files inside the folder:**
+   ```bash
+   mv .devtools/${RENAME_SLUG}/${SERVICE}.compose.yml .devtools/${RENAME_SLUG}/${RENAME_SLUG}.compose.yml
+   ```
+   If `${SERVICE}.Taskfile.yml` exists in the folder:
+   ```bash
+   mv .devtools/${RENAME_SLUG}/${SERVICE}.Taskfile.yml .devtools/${RENAME_SLUG}/${RENAME_SLUG}.Taskfile.yml
+   ```
+
+4. **Apply string substitutions inside the renamed compose and Taskfile** (same substitution
+   logic as Step 12 alias installs, applied to the existing file content):
+   - YAML service key: `${SERVICE}:` → `${RENAME_SNAKE}:`
+   - Container name suffix: `-${SERVICE}` → `-${RENAME_SLUG}`
+   - Volume key declaration: `${SERVICE}_data:` → `${RENAME_SNAKE}_data:`
+   - Volume reference: `${SERVICE}_data` → `${RENAME_SNAKE}_data`
+   - Network key declaration: `${SERVICE}_net:` → `${RENAME_SNAKE}_net:`
+   - Network reference: `${SERVICE}_net` → `${RENAME_SNAKE}_net`
+   - All env var names: `${SERVICE_UPPER}_*` → `${RENAME_PREFIX}_*`
+     (e.g. `REDIS_PORT` → `REDIS_CACHE_PORT`, `REDIS_PASSWORD` → `REDIS_CACHE_PASSWORD`)
+   - Compose filename reference in Taskfile: `${SERVICE}.compose.yml` → `${RENAME_SLUG}.compose.yml`
+
+5. **Update `.devtools/compose.yml` include reference:**
+   Read `.devtools/compose.yml`, find the line:
+   ```
+   - path: ${SERVICE}/${SERVICE}.compose.yml
+   ```
+   Replace with:
+   ```
+   - path: ${RENAME_SLUG}/${RENAME_SLUG}.compose.yml
+   ```
+
+6. **Update `.devtools/Taskfile.yml` include reference:**
+   Read `.devtools/Taskfile.yml`, find the block:
+   ```
+     ${SERVICE}:
+       taskfile: ${SERVICE}/${SERVICE}.Taskfile.yml
+   ```
+   Replace with:
+   ```
+     ${RENAME_SLUG}:
+       taskfile: ${RENAME_SLUG}/${RENAME_SLUG}.Taskfile.yml
+   ```
+
+7. **Update `.devtools/${RENAME_SLUG}/.env` env var keys** (D-16):
+   For each env var key in the file that starts with `${SERVICE_UPPER}_` (e.g. `REDIS_`):
+   - Append ` ## REPLACED` as an inline comment on the old line.
+   - Add a new line below with the renamed key: `${RENAME_PREFIX}_<SUFFIX>=<value>`.
+   - Record each renamed key in a warnings list for the done summary.
+   Example transformation:
+   ```
+   REDIS_PORT=6379 ## REPLACED
+   REDIS_CACHE_PORT=6379
+   REDIS_PASSWORD=secret ## REPLACED
+   REDIS_CACHE_PASSWORD=secret
+   ```
+
+8. **Announce rename completion and proceed** (D-17):
+   Output:
+   > `"Existing ${SERVICE} renamed to ${RENAME_SLUG}. Now installing new ${SERVICE} instance..."`
+
+9. **Proceed to Step 3** with `MODE=standard`, `SERVICE=${SERVICE}`. The `.devtools/${SERVICE}/`
+   slot is now free — the new install will land there. (D-18: all rename operations above are
+   completed before any new files are written.)
+
+---
+
+### Branch B: User skips rename (presses Enter)
+
+If the user presses Enter without providing a suffix:
 
 Ask: `"Add another instance with an alias, or cancel? [alias/cancel]"`
 
@@ -99,7 +193,6 @@ Ask: `"Add another instance with an alias, or cancel? [alias/cancel]"`
     ```
   - If file **exists** → output `"${SERVICE_SLUG} is already installed — nothing to do."` and stop. (MERGE-04)
   - If file **does not exist** → set `MODE=alias` and continue to **Step 3**.
-- No alias set and no existing file → set `MODE=standard` and continue to **Step 2**.
 
 ## Step 2: First-Run Setup
 
