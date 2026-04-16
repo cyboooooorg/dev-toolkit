@@ -98,4 +98,4 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 05-01-PLAN.md — Rewrite Branch B alias validation loop (D-01–D-09) + insert proactive first-install alias prompt in Step 1 (D-10–D-13)
+- [x] 05-01-PLAN.md — Rewrite Branch B alias validation loop (D-01–D-09) + insert proactive first-install alias prompt in Step 1 (D-10–D-13)
