@@ -27,8 +27,11 @@ Interactive `add-service` AI skill for Docker service configuration — 5 suppor
 
 - **BF-01** (High): Grafana password ignored at runtime — `env_file: .env` missing from monitoring.compose.yml grafana service
 - **DOC-01** (Medium): README "What Gets Written" shows stale pre-Phase-4 flat layout
-- **WR-01/WR-02** (Medium): Taskfile `up`/`up-ui` COMPOSE_PROFILES not loaded from `.devtools/.env`
-- DOC-02, DOC-03, WR-03 (Low): Cosmetic — stale path comments, metadata port mismatch, description inconsistency
+- ~~**WR-01/WR-02** (Medium): Taskfile `up`/`up-ui` COMPOSE_PROFILES not loaded from `.devtools/.env`~~ — **FIXED post-ship (2026-04-21)**: added `--profile services` to all Taskfile `up*` tasks
+- ~~**WR-03** (Low): RabbitMQ task description inconsistency~~ — **FIXED post-ship (2026-04-21)**
+- ~~**IN-01**: RabbitMQ `up-ui` DRY violation~~ — **FIXED post-ship (2026-04-21)**
+- ~~**IN-02**: Monitoring missing `up-ui` task~~ — **FIXED post-ship (2026-04-21)**
+- DOC-02, DOC-03 (Low): Cosmetic — stale path comments, metadata port mismatch
 
 ### Archive
 
