@@ -14,14 +14,14 @@ tasks:
       - docker compose -f .devtools/redis/redis.compose.yml --profile services up -d --remove-orphans
 
   up-ui:
-    desc: Start Redis + RedisInsight UI (adds ui profile)
+    desc: Start Redis + RedisInsight UI
     cmds:
-      - docker compose -f .devtools/redis/redis.compose.yml --profile ui up -d --remove-orphans
+      - docker compose -f .devtools/redis/redis.compose.yml --profile services --profile ui up -d --remove-orphans
 
   up-monitoring:
-    desc: Start Redis + metrics exporter (adds monitoring profile)
+    desc: Start Redis + metrics exporter
     cmds:
-      - docker compose -f .devtools/redis/redis.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f .devtools/redis/redis.compose.yml --profile services --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop Redis and all its companions

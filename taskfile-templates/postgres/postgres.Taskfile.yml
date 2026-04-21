@@ -13,14 +13,14 @@ tasks:
       - docker compose -f .devtools/postgres/postgres.compose.yml --profile services up -d --remove-orphans
 
   up-ui:
-    desc: Start PostgreSQL + pgAdmin UI on POSTGRES_UI_PORT (adds ui profile)
+    desc: Start PostgreSQL + pgAdmin UI on POSTGRES_UI_PORT
     cmds:
-      - docker compose -f .devtools/postgres/postgres.compose.yml --profile ui up -d --remove-orphans
+      - docker compose -f .devtools/postgres/postgres.compose.yml --profile services --profile ui up -d --remove-orphans
 
   up-monitoring:
-    desc: Start PostgreSQL + postgres_exporter (adds monitoring profile)
+    desc: Start PostgreSQL + postgres_exporter
     cmds:
-      - docker compose -f .devtools/postgres/postgres.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f .devtools/postgres/postgres.compose.yml --profile services --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop PostgreSQL and all its companions

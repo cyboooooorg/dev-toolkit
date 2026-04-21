@@ -14,14 +14,14 @@ tasks:
       - docker compose -f .devtools/mysql/mysql.compose.yml --profile services up -d --remove-orphans
 
   up-ui:
-    desc: Start MySQL/MariaDB + phpMyAdmin UI on MYSQL_UI_PORT (adds ui profile)
+    desc: Start MySQL/MariaDB + phpMyAdmin UI on MYSQL_UI_PORT
     cmds:
-      - docker compose -f .devtools/mysql/mysql.compose.yml --profile ui up -d --remove-orphans
+      - docker compose -f .devtools/mysql/mysql.compose.yml --profile services --profile ui up -d --remove-orphans
 
   up-monitoring:
-    desc: Start MySQL/MariaDB + mysqld_exporter (adds monitoring profile)
+    desc: Start MySQL/MariaDB + mysqld_exporter
     cmds:
-      - docker compose -f .devtools/mysql/mysql.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f .devtools/mysql/mysql.compose.yml --profile services --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop MySQL/MariaDB and all its companions

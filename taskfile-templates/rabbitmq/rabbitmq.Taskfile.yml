@@ -20,9 +20,9 @@ tasks:
       - docker compose -f .devtools/rabbitmq/rabbitmq.compose.yml up -d --remove-orphans
 
   up-monitoring:
-    desc: Start RabbitMQ + metrics exporter (adds monitoring profile)
+    desc: Start RabbitMQ + metrics exporter
     cmds:
-      - docker compose -f .devtools/rabbitmq/rabbitmq.compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f .devtools/rabbitmq/rabbitmq.compose.yml --profile services --profile monitoring up -d --remove-orphans
 
   down:
     desc: Stop RabbitMQ and all its companions

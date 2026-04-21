@@ -34,7 +34,7 @@ tasks:
   up:
     desc: Start all installed services (skips services not yet installed)
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/compose.yml up -d --remove-orphans
+      - docker compose -f {{.TASKFILE_DIR}}/compose.yml --profile services up -d --remove-orphans
 
   down:
     desc: Stop all installed services
@@ -44,9 +44,9 @@ tasks:
   up-ui:
     desc: Start all installed services with their UI companions
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/compose.yml --profile ui up -d --remove-orphans
+      - docker compose -f {{.TASKFILE_DIR}}/compose.yml --profile services --profile ui up -d --remove-orphans
 
   up-monitoring:
     desc: Start all installed services with their metrics exporters + central monitoring stack
     cmds:
-      - docker compose -f {{.TASKFILE_DIR}}/compose.yml --profile monitoring up -d --remove-orphans
+      - docker compose -f {{.TASKFILE_DIR}}/compose.yml --profile services --profile monitoring up -d --remove-orphans
