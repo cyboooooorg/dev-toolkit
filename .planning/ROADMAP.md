@@ -28,7 +28,10 @@ See [`.planning/milestones/v1.0-ROADMAP.md`](.planning/milestones/v1.0-ROADMAP.m
   2. When user says no, the written compose file contains no `ports:` block for that service
   3. When user says yes, the skill proceeds to the port-number question
   4. A service installed with the no-port path is reachable only within the Docker network — no host port appears anywhere in its compose file
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 08-01-PLAN.md — Host-port opt-in gate: Q&A question insertion, compose port removal, env var conditional skip, summary display
 
 #### Phase 9: Port Collision Guard
 **Goal**: When a user requests host port binding, their chosen port is validated against all installed services before any file is written, and the skill re-prompts until a safe port is confirmed or the user backs out
