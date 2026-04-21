@@ -124,4 +124,4 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 07-01-PLAN.md — Fix Step 1 `exists` branch: alias slug already-installed → emit "already installed — nothing to do." and stop; base service names still route to Step 1a
+- [x] 07-01-PLAN.md — Fix Step 1 `exists` branch: alias slug already-installed → emit "already installed — nothing to do." and stop; base service names still route to Step 1a

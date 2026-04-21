@@ -36,7 +36,7 @@
 - [ ] **MERGE-01**: Before writing, the skill checks if the service already exists in `.devtools/`
 - [ ] **MERGE-02**: If the service already exists, the skill informs the user and asks: add another instance, or cancel
 - [x] **MERGE-03**: If adding another instance, the skill asks for an alias/name (e.g. `redis-cache`, `redis-session`) used to namespace the service, Taskfile, volume, and env vars
-- [ ] **MERGE-04**: Install is idempotent for identical alias — running the skill again for `redis-cache` that already exists does not overwrite it
+- [x] **MERGE-04**: Install is idempotent for identical alias — running the skill again for `redis-cache` that already exists does not overwrite it
 
 ### Distribution (DIST)
 
@@ -89,7 +89,7 @@
 | MERGE-01 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
 | MERGE-02 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
 | MERGE-03 | Phase 6 — Fix Taskfile Integration & UI Port Gap | Complete |
-| MERGE-04 | Phase 7 — Fix MERGE-04 Idempotency UX | Pending |
+| MERGE-04 | Phase 7 — Fix MERGE-04 Idempotency UX | Complete |
 | SKILL-01 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |
 | SKILL-02 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |
 | SKILL-03 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |
