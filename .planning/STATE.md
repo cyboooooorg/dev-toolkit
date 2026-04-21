@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Port Management
-status: defining_requirements
-stopped_at: Milestone v1.1 started — defining requirements
-last_updated: "2026-04-21T12:26:00.000Z"
+status: roadmap_ready
+stopped_at: Roadmap created — Phase 8 and Phase 9 defined, ready for planning
+last_updated: "2026-04-21T12:30:00.000Z"
 last_activity: 2026-04-21
 progress:
-  total_phases: 0
+  total_phases: 2
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-04-21 — v1.1 started)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: Phase 8 — Host Port Opt-In (not started)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-04-21 — Milestone v1.1 started
+Status: Roadmap ready — awaiting `/gsd-plan-phase 8`
+Last activity: 2026-04-21 — Roadmap created for v1.1
 
-Progress: [██████████] 100%
+Progress: [__________] 0% (0/2 phases)
 
 ## Performance Metrics
 

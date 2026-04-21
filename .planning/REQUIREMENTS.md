@@ -21,8 +21,8 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| PORT-01 | — | pending |
-| PORT-02 | — | pending |
-| PORT-03 | — | pending |
-| PORT-04 | — | pending |
-| PORT-05 | — | pending |
+| PORT-01 | Phase 8 | Pending |
+| PORT-02 | Phase 8 | Pending |
+| PORT-03 | Phase 9 | Pending |
+| PORT-04 | Phase 9 | Pending |
+| PORT-05 | Phase 9 | Pending |
