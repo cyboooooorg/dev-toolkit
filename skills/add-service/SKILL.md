@@ -466,6 +466,51 @@ string (user pressed enter to skip), after loading the template content:
 - Remove `-a "${REDIS_PASSWORD}"` from the `healthcheck.test` command.
 Apply these modifications to the in-memory content before writing (see write destination below).
 
+**When `ANSWERS[host_port]=false` (user opted out of host port binding):**
+
+Remove the main service port mapping from the in-memory compose content before writing.
+Apply this modification AFTER any alias substitutions — so the env var names in the port
+line are already in their final form (e.g. `${REDIS_CACHE_PORT}` for alias installs).
+
+The main port line to remove for each service (match and delete the entire line including
+leading whitespace and the trailing newline):
+
+| Service  | Main port line to remove                                  |
+|----------|-----------------------------------------------------------|
+| redis    | `      - "127.0.0.1:${REDIS_PORT}:6379"`                 |
+| rabbitmq | `      - "127.0.0.1:${RABBITMQ_PORT}:5672"`              |
+| postgres | `      - "127.0.0.1:${POSTGRES_PORT}:5432"`              |
+| mysql    | `      - "127.0.0.1:${MYSQL_PORT}:3306"`                 |
+| mongodb  | `      - "127.0.0.1:${MONGODB_PORT}:27017"`              |
+
+For alias installs, the env var prefix is `${ENV_PREFIX}` — match on the container port
+number (`:6379`, `:5672`, `:5432`, `:3306`, `:27017`) in the main service container's
+`ports:` block to identify the correct line regardless of prefix.
+
+**After removing the main port line, check the remaining `ports:` block of the main
+service container:**
+
+- If the `ports:` block is now **empty** (no remaining lines under `ports:`):
+  Remove the entire `ports:` block — including the `ports:` key line itself and any blank
+  lines immediately following it. **Never write an empty `ports:` list.** (D-08)
+  Services where this applies (only one port entry): redis, postgres, mysql, mongodb.
+
+- If the `ports:` block still has **remaining entries**:
+  Leave the remaining entries untouched. The `ports:` block stays with just the remaining
+  lines. (D-09)
+  Service where this applies: rabbitmq — after removing the AMQP port line
+  (`127.0.0.1:${RABBITMQ_PORT}:5672`), the management UI port line
+  (`127.0.0.1:${RABBITMQ_UI_PORT}:15672`) remains.
+
+**Scope of this modification — do NOT touch:**
+- UI companion container `ports:` blocks (redisinsight, pgadmin, phpmyadmin, mongo_express).
+  These are ALWAYS host-mapped regardless of opt-out — the browser needs host access. (D-11)
+- Monitoring exporter containers (`redis_exporter`, `rabbitmq_exporter`, etc.) — they already
+  have no `ports:` block by design. (D-13)
+
+Apply all modifications to the in-memory content before writing — never modify the fetched
+template file. (D-10)
+
 **For alias install (`MODE=alias`):** Before writing, perform all string substitutions in the
 file content — see **Step 12** for the complete substitution map. Apply substitutions to the
 in-memory copy before writing. Do NOT modify the original template file.
