@@ -10,11 +10,11 @@
 
 ### Service Templates (TMPL)
 
-- [ ] **TMPL-01**: Docker Compose service fragment for Redis (no `version:` key, named volume, health check)
-- [ ] **TMPL-02**: Docker Compose service fragment for RabbitMQ (no `version:` key, named volume, health check, management UI port opt-in)
-- [ ] **TMPL-03**: Docker Compose service fragment for PostgreSQL (no `version:` key, named volume, health check)
-- [ ] **TMPL-04**: Docker Compose service fragment for MySQL (no `version:` key, named volume, health check)
-- [ ] **TMPL-05**: Docker Compose service fragment for MongoDB (no `version:` key, named volume, health check)
+- [x] **TMPL-01**: Docker Compose service fragment for Redis (no `version:` key, named volume, health check)
+- [x] **TMPL-02**: Docker Compose service fragment for RabbitMQ (no `version:` key, named volume, health check, management UI port opt-in)
+- [x] **TMPL-03**: Docker Compose service fragment for PostgreSQL (no `version:` key, named volume, health check)
+- [x] **TMPL-04**: Docker Compose service fragment for MySQL (no `version:` key, named volume, health check)
+- [x] **TMPL-05**: Docker Compose service fragment for MongoDB (no `version:` key, named volume, health check)
 - [x] **TMPL-06**: Per-service Taskfile template for each service (e.g. `redis.yml`) with tasks: `up`, `down`, `logs`, `restart`; all `-f` flags use `{{.TASKFILE_DIR}}` for portable paths
 - [x] **TMPL-07**: Root `Taskfile.yml` (or append to existing) with `includes:` entries pointing to `.devtools/*.yml` using `optional: true`
 - [x] **TMPL-08**: All generated files written to `.devtools/` directory — the skill never modifies files outside `.devtools/`
@@ -22,8 +22,8 @@
 ### Interactive Configuration (CONF)
 
 - [x] **CONF-01**: Before writing any files, the skill asks for: service port, image version/tag, and credentials (username, password, database name where applicable)
-- [ ] **CONF-02**: For RabbitMQ, additionally ask whether to expose the Management UI port (15672)
-- [ ] **CONF-03**: Each configuration question provides a sensible default the user can accept or override
+- [x] **CONF-02**: For RabbitMQ, additionally ask whether to expose the Management UI port (15672)
+- [x] **CONF-03**: Each configuration question provides a sensible default the user can accept or override
 
 ### Credentials Handling (CRED)
 
@@ -33,8 +33,8 @@
 
 ### Multi-instance & Idempotency (MERGE)
 
-- [ ] **MERGE-01**: Before writing, the skill checks if the service already exists in `.devtools/`
-- [ ] **MERGE-02**: If the service already exists, the skill informs the user and asks: add another instance, or cancel
+- [x] **MERGE-01**: Before writing, the skill checks if the service already exists in `.devtools/`
+- [x] **MERGE-02**: If the service already exists, the skill informs the user and asks: add another instance, or cancel
 - [x] **MERGE-03**: If adding another instance, the skill asks for an alias/name (e.g. `redis-cache`, `redis-session`) used to namespace the service, Taskfile, volume, and env vars
 - [x] **MERGE-04**: Install is idempotent for identical alias — running the skill again for `redis-cache` that already exists does not overwrite it
 
@@ -72,11 +72,11 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| TMPL-01 | Phase 1 — Templates & Credential Foundation | Pending |
-| TMPL-02 | Phase 1 — Templates & Credential Foundation | Pending |
-| TMPL-03 | Phase 1 — Templates & Credential Foundation | Pending |
-| TMPL-04 | Phase 1 — Templates & Credential Foundation | Pending |
-| TMPL-05 | Phase 1 — Templates & Credential Foundation | Pending |
+| TMPL-01 | Phase 1 — Templates & Credential Foundation | Complete |
+| TMPL-02 | Phase 1 — Templates & Credential Foundation | Complete |
+| TMPL-03 | Phase 1 — Templates & Credential Foundation | Complete |
+| TMPL-04 | Phase 1 — Templates & Credential Foundation | Complete |
+| TMPL-05 | Phase 1 — Templates & Credential Foundation | Complete |
 | TMPL-06 | Phase 6 — Fix Taskfile Integration & UI Port Gap | Complete |
 | TMPL-07 | Phase 1 — Templates & Credential Foundation | Complete |
 | TMPL-08 | Phase 1 — Templates & Credential Foundation | Complete |
@@ -84,10 +84,10 @@
 | CRED-02 | Phase 1 — Templates & Credential Foundation | Complete |
 | CRED-03 | Phase 1 — Templates & Credential Foundation | Complete |
 | CONF-01 | Phase 6 — Fix Taskfile Integration & UI Port Gap | Complete |
-| CONF-02 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
-| CONF-03 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
-| MERGE-01 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
-| MERGE-02 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Pending |
+| CONF-02 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Complete |
+| CONF-03 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Complete |
+| MERGE-01 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Complete |
+| MERGE-02 | Phase 2 — Skill Core — Interactive Flow & Merge Logic | Complete |
 | MERGE-03 | Phase 6 — Fix Taskfile Integration & UI Port Gap | Complete |
 | MERGE-04 | Phase 7 — Fix MERGE-04 Idempotency UX | Complete |
 | SKILL-01 | Phase 3 — Cross-Runtime Wiring & Distribution | Complete |
