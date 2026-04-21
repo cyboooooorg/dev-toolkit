@@ -15,9 +15,9 @@ tasks:
       - docker compose -f .devtools/rabbitmq/rabbitmq.compose.yml --profile services up -d --remove-orphans
 
   up-ui:
-    desc: Start RabbitMQ (management UI is bundled — this is equivalent to up)
+    desc: Start RabbitMQ (management UI is always-on — equivalent to up)
     cmds:
-      - docker compose -f .devtools/rabbitmq/rabbitmq.compose.yml up -d --remove-orphans
+      - task: up
 
   up-monitoring:
     desc: Start RabbitMQ + metrics exporter

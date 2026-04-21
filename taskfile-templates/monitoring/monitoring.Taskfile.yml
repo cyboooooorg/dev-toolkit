@@ -13,6 +13,11 @@ tasks:
     cmds:
       - docker compose -f .devtools/monitoring/monitoring.compose.yml --profile monitoring up -d --remove-orphans
 
+  up-ui:
+    desc: Start Prometheus + Grafana (Grafana is the UI — same as up)
+    cmds:
+      - task: up
+
   down:
     desc: Stop Prometheus + Grafana
     cmds:
