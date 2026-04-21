@@ -1,5 +1,16 @@
 # dev-tools
 
+## Current Milestone: v1.1 Port Management
+
+**Goal:** Give users control over host port mapping and prevent port collisions when installing services.
+
+**Target features:**
+- Optional host port binding — skill asks if the user wants a host port mapped (default: no, service internal-only)
+- Port collision detection — when host port binding is requested, scan all already-installed services (including UI and monitoring ports) for conflicts
+- Port re-prompt loop — if chosen port is taken, ask again until a free port is selected or user opts out
+
+---
+
 ## What This Is
 
 A development toolkit that works as an AI skill — triggered by natural language like "add Redis to this project." It interactively asks configuration questions (port, version, credentials) and then writes Docker Compose and Taskfile configurations into a `.devtools/` directory in the target project. Designed to work with both GitHub Copilot CLI and Claude/MCP-compatible AI runtimes.
@@ -25,7 +36,13 @@ An AI can drop production-ready Docker service configs and Taskfiles into any pr
 - ✓ Multi-instance alias namespacing (service, volumes, env vars, Taskfile) — v1.0
 - ✓ Idempotent re-install: alias slug re-run exits cleanly with "already installed" — v1.0
 
-### Active (v2.0 targets)
+### Active (v1.1 targets)
+
+- [ ] Optional host port binding — ask user before mapping any service port to host (PORT-01, PORT-02)
+- [ ] Port collision detection — scan installed services for conflicting host ports before writing (PORT-03, PORT-04)
+- [ ] Port re-prompt loop — if chosen port is taken, ask for a different one (PORT-05)
+
+### Future (v2.0 targets)
 
 - [ ] Auto-detect existing stack (package.json, requirements.txt, etc.) and suggest relevant services
 - [ ] Service-specific CLI tasks: `redis:cli`, `mongo:shell`, `psql`
@@ -76,9 +93,9 @@ An AI can drop production-ready Docker service configs and Taskfiles into any pr
 
 ## Current State
 
-**v1.0 SHIPPED 2026-04-21** — `skills/add-service/SKILL.md` (805 lines, 13 steps). Interactive AI skill guides configuration Q&A, shows a confirmation gate, then writes Docker Compose and Taskfile configs to `.devtools/<service>/`. Merge detection, alias multi-instance, and alias idempotency all implemented. 23/23 requirements satisfied. Tech debt catalogued (BF-01, DOC-01, WR-01/02 — non-blocking).
+**v1.1 started 2026-04-21** — Port management milestone in requirements/roadmap phase. v1.0 shipped with all 23 requirements satisfied; tech debt BF-01 (Grafana env_file) and DOC-01 (README layout) carried forward.
 
-## Evolution
+*Last updated: 2026-04-21 — v1.1 milestone started*
 
 This document evolves at phase transitions and milestone boundaries.
 
@@ -96,4 +113,21 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 after v1.0 milestone*
+## Evolution
+
+This document evolves at phase transitions and milestone boundaries.
+
+**After each phase transition** (via `/gsd-transition`):
+1. Requirements invalidated? → Move to Out of Scope with reason
+2. Requirements validated? → Move to Validated with phase reference
+3. New requirements emerged? → Add to Active
+4. Decisions to log? → Add to Key Decisions
+5. "What This Is" still accurate? → Update if drifted
+
+**After each milestone** (via `/gsd-complete-milestone`):
+1. Full review of all sections
+2. Core Value check — still the right priority?
+3. Audit Out of Scope — reasons still valid?
+4. Update Context with current state
+
+*Last updated: 2026-04-21 — v1.1 milestone started*

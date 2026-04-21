@@ -1,34 +1,34 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: MVP
-status: milestone_complete
-stopped_at: Milestone v1.0 archived
-last_updated: "2026-04-21T12:00:00.000Z"
+milestone: v1.1
+milestone_name: Port Management
+status: defining_requirements
+stopped_at: Milestone v1.1 started — defining requirements
+last_updated: "2026-04-21T12:26:00.000Z"
 last_activity: 2026-04-21
 progress:
-  total_phases: 7
-  completed_phases: 7
-  total_plans: 14
-  completed_plans: 14
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-21 — v1.0 complete)
+See: .planning/PROJECT.md (updated 2026-04-21 — v1.1 started)
 
 **Core value:** An AI can drop production-ready Docker service configs and Taskfiles into any project in one conversation, with zero manual file writing.
-**Current focus:** Milestone v1.0 archived — start next milestone with `/gsd-new-milestone`
+**Current focus:** Milestone v1.1 — Port management (optional host binding, collision detection)
 
 ## Current Position
 
-Phase: 07 (fix-merge-04-idempotency-ux) — COMPLETE
-Milestone: v1.0 SHIPPED
-Status: All 7 phases verified, archived
-Last activity: 2026-04-21
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-21 — Milestone v1.1 started
 
 Progress: [██████████] 100%
 
