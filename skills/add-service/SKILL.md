@@ -98,7 +98,11 @@ test -f .devtools/${SERVICE}/${SERVICE}.compose.yml
 
     *(No conflict check is needed here — the slot was just confirmed free by the `test -f`
     check above.)* (D-13: alias is locked before Step 5 Q&A)
-- If the file **exists** → go to **Step 1a**.
+- If the file **exists**:
+  - If `${SERVICE}` is one of the 6 base service names (`redis`, `rabbitmq`, `postgres`, `mysql`, `mongodb`, `monitoring`) → go to **Step 1a** (the user may want to rename-before-add or install a new alias).
+  - Otherwise (`${SERVICE}` is an alias slug — already installed) → output:
+    > "`${SERVICE}` is already installed — nothing to do."
+    Stop.
 
 ## Step 1a: Merge Detection — Rename-Before-Add Flow
 
