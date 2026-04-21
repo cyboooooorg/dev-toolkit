@@ -10,29 +10,39 @@ An AI can drop production-ready Docker service configs and Taskfiles into any pr
 
 ## Requirements
 
-### Validated
+### Validated ✓ v1.0
 
-- [x] Docker Compose service definitions for Redis, RabbitMQ, PostgreSQL, MySQL, MongoDB — Validated in Phase 01: Templates & Credential Foundation
-- [x] Taskfile tasks per service: `up`, `up-ui`, `up-monitoring`, `down`, `logs`, `restart` — Validated in Phase 01: Templates & Credential Foundation
-- [x] Template library with `{{PLACEHOLDER}}` token format for credential substitution — Validated in Phase 01: Templates & Credential Foundation
-- [x] No hardcoded secrets in any template; all credentials via `.env` — Validated in Phase 01: Templates & Credential Foundation
+- ✓ Docker Compose service definitions for Redis, RabbitMQ, PostgreSQL, MySQL, MongoDB — v1.0
+- ✓ Taskfile tasks per service: `up`, `up-ui`, `up-monitoring`, `down`, `logs`, `restart` — v1.0
+- ✓ Template library with `{{PLACEHOLDER}}` token format for credential substitution — v1.0
+- ✓ No hardcoded secrets in any template; all credentials via `.env` — v1.0
+- ✓ AI skill definition that triggers on natural language like "add Redis to this project" — v1.0
+- ✓ Interactive configuration flow: ask port, version, credentials before writing files — v1.0
+- ✓ Writes a `.devtools/<service>/` directory into the target project with Docker Compose + Taskfile — v1.0
+- ✓ Per-service Taskfiles included from a root `Taskfile.yml` via `includes:` — v1.0
+- ✓ Compatible with both GitHub Copilot CLI skill format and Claude/MCP skill format — v1.0
+- ✓ Merge detection: if `.devtools/` exists, offer alias or cancel — v1.0
+- ✓ Multi-instance alias namespacing (service, volumes, env vars, Taskfile) — v1.0
+- ✓ Idempotent re-install: alias slug re-run exits cleanly with "already installed" — v1.0
 
-### Active
+### Active (v2.0 targets)
 
-- [ ] AI skill definition that triggers on natural language like "add Redis to this project"
-- [ ] Interactive configuration flow: ask port, version, credentials before writing files
-- [ ] Writes a `.devtools/` directory into the target project with Docker Compose + Taskfile
-- [ ] Per-service Taskfiles (e.g. `redis.yml`, `rabbitmq.yml`) included from a root `Taskfile.yml`
-- [ ] Compatible with both GitHub Copilot CLI skill format and Claude/MCP skill format
-- [ ] If a `.devtools/` directory already exists, merge new service without overwriting existing ones
-- [ ] Skill is self-contained and installable into any project without dependencies
+- [ ] Auto-detect existing stack (package.json, requirements.txt, etc.) and suggest relevant services
+- [ ] Service-specific CLI tasks: `redis:cli`, `mongo:shell`, `psql`
+- [ ] Version pinning recommendations (warn if `latest` tag used)
+- [ ] Kafka / Elasticsearch service templates
+- [ ] Health-check wait task (poll until service is ready)
+- [ ] Fix BF-01: Monitoring Grafana password not applied (add `env_file: .env` to grafana service)
+- [ ] Fix DOC-01: README "What Gets Written" shows stale pre-Phase-4 flat layout
+- [ ] Fix WR-01/WR-02: Taskfile COMPOSE_PROFILES not loaded from `.devtools/.env`
 
 ### Out of Scope
 
 - Kubernetes / Helm chart generation — different problem, different tool
 - Cloud provisioning (AWS, GCP, Azure) — this is local dev only
 - Language-specific scaffolding (app code, frameworks) — only infrastructure config
-- Service health checks or monitoring dashboards — out of scope for v1
+- MCP server implementation — overkill; SKILL.md format is sufficient
+- Automatic port conflict detection — violates zero-dependency constraint
 
 ## Context
 
@@ -53,17 +63,20 @@ An AI can drop production-ready Docker service configs and Taskfiles into any pr
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| `.devtools/` as output directory | Isolated from project source, easy to gitignore or include selectively | Confirmed Phase 01 |
-| Per-service Taskfiles included from root | Modular — adding a service doesn't require editing existing files | Confirmed Phase 01 |
-| `{{PLACEHOLDER}}` token format | Simple, unambiguous substitution; no shell expansion collisions | Confirmed Phase 01 |
-| Three-tier Docker networks (per-service / _services / _monitoring) | Isolation + cross-service reach without exposing internals | Confirmed Phase 01 |
-| Plain volume key names (no `${VAR}` in keys) | Docker Compose v2 does not support variable expansion in volume key names | Confirmed Phase 01 |
-| Interactive config before writing | Avoids wrong defaults baked in; user owns their config from the start | — Pending Phase 02 |
-| Support both Copilot CLI and Claude/MCP | Maximize portability across AI tools | — Pending Phase 02 |
+| `.devtools/` as output directory | Isolated from project source, easy to gitignore or include selectively | ✓ Confirmed Phase 01 |
+| Per-service Taskfiles included from root | Modular — adding a service doesn't require editing existing files | ✓ Confirmed Phase 01 |
+| `{{PLACEHOLDER}}` token format | Simple, unambiguous substitution; no shell expansion collisions | ✓ Confirmed Phase 01 |
+| Three-tier Docker networks (per-service / _services / _monitoring) | Isolation + cross-service reach without exposing internals | ✓ Confirmed Phase 01 |
+| Plain volume key names (no `${VAR}` in keys) | Docker Compose v2 does not support variable expansion in volume key names | ✓ Confirmed Phase 01 |
+| Interactive config before writing | Avoids wrong defaults baked in; user owns their config from the start | ✓ Confirmed Phase 02 |
+| Support both Copilot CLI and Claude/MCP | Maximize portability across AI tools | ✓ Confirmed Phase 03 |
+| Subfolder per-service layout (`.devtools/<slug>/`) | Supports multi-instance aliases cleanly; each instance has its own `.env` | ✓ Confirmed Phase 04 |
+| Proactive alias prompt on first install | Reduces re-run friction; user sets instance name upfront | ✓ Confirmed Phase 05 |
+| 6 base service names as idempotency guard | Distinguishes "base service re-install" (→ Step 1a) from "alias slug re-run" (→ early exit) | ✓ Confirmed Phase 07 |
 
 ## Current State
 
-**Phase 02 complete** — Core `skills/add-service/SKILL.md` written (542 lines, 14 steps). Interactive AI skill guides configuration Q&A, shows a confirmation gate, then writes Docker Compose and Taskfile configs to `.devtools/`. Merge detection, alias multi-instance, and alias idempotency all implemented. Human UAT pending (3 runtime tests). Ready for Phase 03: cross-runtime wiring & distribution.
+**v1.0 SHIPPED 2026-04-21** — `skills/add-service/SKILL.md` (805 lines, 13 steps). Interactive AI skill guides configuration Q&A, shows a confirmation gate, then writes Docker Compose and Taskfile configs to `.devtools/<service>/`. Merge detection, alias multi-instance, and alias idempotency all implemented. 23/23 requirements satisfied. Tech debt catalogued (BF-01, DOC-01, WR-01/02 — non-blocking).
 
 ## Evolution
 
@@ -83,4 +96,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-10 — Phase 02 complete*
+*Last updated: 2026-04-21 after v1.0 milestone*

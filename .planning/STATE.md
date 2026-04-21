@@ -1,10 +1,10 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.0
-milestone_name: milestone
-status: verifying
-stopped_at: Completed 07-01-PLAN.md
-last_updated: "2026-04-21T09:23:06.515Z"
+milestone_name: MVP
+status: milestone_complete
+stopped_at: Milestone v1.0 archived
+last_updated: "2026-04-21T12:00:00.000Z"
 last_activity: 2026-04-21
 progress:
   total_phases: 7
@@ -18,16 +18,16 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-10)
+See: .planning/PROJECT.md (updated 2026-04-21 — v1.0 complete)
 
 **Core value:** An AI can drop production-ready Docker service configs and Taskfiles into any project in one conversation, with zero manual file writing.
-**Current focus:** Phase 06 — fix-taskfile-integration-and-ui-port-gap
+**Current focus:** Milestone v1.0 archived — start next milestone with `/gsd-new-milestone`
 
 ## Current Position
 
-Phase: 06 (fix-taskfile-integration-and-ui-port-gap) — EXECUTING
-Plan: 1 of 1
-Status: Phase complete — ready for verification
+Phase: 07 (fix-merge-04-idempotency-ux) — COMPLETE
+Milestone: v1.0 SHIPPED
+Status: All 7 phases verified, archived
 Last activity: 2026-04-21
 
 Progress: [██████████] 100%
