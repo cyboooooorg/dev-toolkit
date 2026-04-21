@@ -422,7 +422,8 @@ Example layout (adapt to the actual service and answers):
 Service:        redis
 Mode:           standard install  (or: alias install as "redis-cache")
 ─────────────────────────────────────────────
-Port:           6379
+Port:           6379              ← when ANSWERS[host_port]=true (shows the port number)
+Port:           internal only (no host port)   ← when ANSWERS[host_port]=false (D-14)
 Version:        7
 Password:       ****
 UI companion:   disabled
@@ -567,6 +568,14 @@ and config to `.devtools/${SERVICE_SLUG}/.env` (create if not exists, append if 
 ```
 
 For **standard** install — env var names from metadata `env_var` field:
+
+**When `ANSWERS[host_port]=false`:** Omit the main service port env var from the `.env` write.
+Do not write `REDIS_PORT`, `RABBITMQ_PORT`, `POSTGRES_PORT`, `MYSQL_PORT`, or `MONGODB_PORT`
+(or their alias-prefixed equivalents) to `.devtools/${SERVICE_SLUG}/.env`.
+There is no host port to record. All other env vars are written as normal.
+For rabbitmq: `RABBITMQ_UI_PORT` is still written (management UI is always-on). (D-05)
+
+**When `ANSWERS[host_port]=true`:** Write all env vars as listed in the table below.
 
 | Service | Env vars to write |
 |---------|------------------|
