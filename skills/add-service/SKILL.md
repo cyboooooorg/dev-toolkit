@@ -319,10 +319,16 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
 
 ### Universal questions (all services):
 
-1. **Port?** `[default: <port from metadata>]`
+1. **Expose this service on a host port? [y/N]** (default: N — internal Docker network only)
+   - Store answer as `ANSWERS[host_port]=true/false`.
+   - If **No (default)**: skip the Port question (question 2 below) entirely — proceed directly
+     to question 3 (Image version). Do NOT ask for a port number. (D-04)
+   - If **Yes**: continue to the Port question below. (D-06)
+
+2. **Port?** `[default: <port from metadata>]` *(asked only if `ANSWERS[host_port]=true`)*
    - Store answer as `ANSWERS[port]`.
 
-2. **Image version/tag?** `[default: <version from metadata>]`
+3. **Image version/tag?** `[default: <version from metadata>]`
    - Store answer as `ANSWERS[version]`.
 
 ---
@@ -331,38 +337,38 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
 
 #### redis
 *(Port default: `[default: 6379]`)*
-3. `"Password? [optional — press enter to skip]"`
+4. `"Password? [optional — press enter to skip]"`
    - If user presses enter → `ANSWERS[password]=""` (empty string — Redis runs without auth).
    - Otherwise → `ANSWERS[password]=<user input>`.
 
 #### rabbitmq
 *(Port default: `[default: 5672]`)*
-3. `"Username? [default: admin]"` → `ANSWERS[username]`
-4. `"Password? (required — no default)"` → `ANSWERS[password]` (must be non-empty; re-ask if blank)
-5. `"Management UI port? [default: 15672]"` → `ANSWERS[ui_port]`
+4. `"Username? [default: admin]"` → `ANSWERS[username]`
+5. `"Password? (required — no default)"` → `ANSWERS[password]` (must be non-empty; re-ask if blank)
+6. `"Management UI port? [default: 15672]"` → `ANSWERS[ui_port]`
    *(Note: RabbitMQ management UI is always-on — bundled in the rabbitmq:*-management image.
    Step 6 "Enable UI companion?" is SKIPPED for RabbitMQ.)*
 
 #### postgres
 *(Port default: `[default: 5432]`)*
-3. `"Username? [default: postgres]"` → `ANSWERS[username]`
-4. `"Password? (required — no default)"` → `ANSWERS[password]` (re-ask if blank)
-5. `"Database name? [default: app]"` → `ANSWERS[db_name]`
+4. `"Username? [default: postgres]"` → `ANSWERS[username]`
+5. `"Password? (required — no default)"` → `ANSWERS[password]` (re-ask if blank)
+6. `"Database name? [default: app]"` → `ANSWERS[db_name]`
 
 #### mysql
 *(Port default: `[default: 3306]`)*
-3. `"Username? [default: app]"` → `ANSWERS[username]`
-4. `"Password? (required — no default)"` → `ANSWERS[password]` (re-ask if blank)
-5. `"Database name? [default: app]"` → `ANSWERS[db_name]`
-6. `"Root password? (required — no default)"` → `ANSWERS[root_password]`
+4. `"Username? [default: app]"` → `ANSWERS[username]`
+5. `"Password? (required — no default)"` → `ANSWERS[password]` (re-ask if blank)
+6. `"Database name? [default: app]"` → `ANSWERS[db_name]`
+7. `"Root password? (required — no default)"` → `ANSWERS[root_password]`
    *(MYSQL_ROOT_PASSWORD — required by MariaDB/MySQL even though it has token: null in metadata.json)*
-7. *(MariaDB is the default image variant. MariaDB 11 ≈ MySQL 8 compatible. If user needs MySQL:
+8. *(MariaDB is the default image variant. MariaDB 11 ≈ MySQL 8 compatible. If user needs MySQL:
    they can override the version tag to use mysql:8 instead.)*
 
 #### mongodb
 *(Port default: `[default: 27017]`)*
-3. `"Username? [default: admin]"` → `ANSWERS[username]`
-4. `"Password? (required — no default)"` → `ANSWERS[password]` (re-ask if blank)
+4. `"Username? [default: admin]"` → `ANSWERS[username]`
+5. `"Password? (required — no default)"` → `ANSWERS[password]` (re-ask if blank)
 
 ## Step 6: UI Companion Prompt
 
