@@ -9,9 +9,9 @@ version: '3'
 tasks:
 
   up:
-    desc: Start Redis (main service — requires COMPOSE_PROFILES=services in .devtools/.env)
+    desc: Start Redis (main service)
     cmds:
-      - docker compose -f .devtools/redis/redis.compose.yml up -d --remove-orphans
+      - docker compose -f .devtools/redis/redis.compose.yml --profile services up -d --remove-orphans
 
   up-ui:
     desc: Start Redis + RedisInsight UI (adds ui profile)

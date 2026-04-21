@@ -10,9 +10,9 @@ version: '3'
 tasks:
 
   up:
-    desc: Start RabbitMQ with management UI on RABBITMQ_UI_PORT (requires COMPOSE_PROFILES=services in .env)
+    desc: Start RabbitMQ with management UI on RABBITMQ_UI_PORT
     cmds:
-      - docker compose -f .devtools/rabbitmq/rabbitmq.compose.yml up -d --remove-orphans
+      - docker compose -f .devtools/rabbitmq/rabbitmq.compose.yml --profile services up -d --remove-orphans
 
   up-ui:
     desc: Start RabbitMQ (management UI is bundled — this is equivalent to up)

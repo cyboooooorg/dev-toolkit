@@ -8,9 +8,9 @@ version: '3'
 tasks:
 
   up:
-    desc: Start MongoDB (requires COMPOSE_PROFILES=services in .devtools/.env)
+    desc: Start MongoDB (main service)
     cmds:
-      - docker compose -f .devtools/mongodb/mongodb.compose.yml up -d --remove-orphans
+      - docker compose -f .devtools/mongodb/mongodb.compose.yml --profile services up -d --remove-orphans
 
   up-ui:
     desc: Start MongoDB + Mongo Express UI on MONGODB_UI_PORT (adds ui profile)

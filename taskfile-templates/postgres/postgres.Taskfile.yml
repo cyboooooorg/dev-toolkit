@@ -8,9 +8,9 @@ version: '3'
 tasks:
 
   up:
-    desc: Start PostgreSQL (requires COMPOSE_PROFILES=services in .devtools/.env)
+    desc: Start PostgreSQL (main service)
     cmds:
-      - docker compose -f .devtools/postgres/postgres.compose.yml up -d --remove-orphans
+      - docker compose -f .devtools/postgres/postgres.compose.yml --profile services up -d --remove-orphans
 
   up-ui:
     desc: Start PostgreSQL + pgAdmin UI on POSTGRES_UI_PORT (adds ui profile)
