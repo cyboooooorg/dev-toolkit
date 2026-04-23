@@ -338,17 +338,22 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
       results and `BOUND_PORTS={}` with no user-visible message.) (D-04)
 
       ```bash
-      find .devtools -name "*.compose.yml" -print0 | xargs -0 grep -h "127\.0\.0\.1:" 2>/dev/null
+      find .devtools -name "*.compose.yml" -print0 \
+        | xargs -0 grep -hE '^\s*-\s*"?([0-9a-f.:]+:)?(\$\{[A-Z_]+\}|[0-9]+):[0-9]+' 2>/dev/null
       ```
 
-      For each matching line, the format is one of:
-      - `"127.0.0.1:${ENV_VAR}:NNNN"` — extract the env-var's resolved value if available,
-        or note the env var name for .env cross-reference.
-      - `"127.0.0.1:NNNN:NNNN"` — extract the first NNNN as the host port.
+      This matches all common Docker Compose port binding formats: `"127.0.0.1:NNNN:NNNN"`,
+      `"0.0.0.0:NNNN:NNNN"`, bare `"NNNN:NNNN"`, and `${ENV_VAR}` host-port variants.
 
-      More precisely: from each port line, capture the token between `127.0.0.1:` and the
-      second `:` (the container port). That token is either a literal port number or an
-      `${ENV_VAR}` reference.
+      For each matching line, extract the **host-side port** — always the second-to-last
+      colon-separated field in the port string:
+      - `"127.0.0.1:6379:6379"` → fields: `[127.0.0.1, 6379, 6379]` → host port = `6379`
+      - `"0.0.0.0:6379:6379"` → fields: `[0.0.0.0, 6379, 6379]` → host port = `6379`
+      - `"6379:6379"` → fields: `[6379, 6379]` → host port = `6379`
+      - `"127.0.0.1:${ENV_VAR}:NNNN"` → fields: `[127.0.0.1, ${ENV_VAR}, NNNN]` → host
+        port token = `${ENV_VAR}` (resolve below)
+
+      That token is either a literal port number or an `${ENV_VAR}` reference.
 
       To resolve `${ENV_VAR}` references, read the service's `.devtools/<slug>/.env` for
       the variable value. The service slug is the immediate parent directory of the compose
