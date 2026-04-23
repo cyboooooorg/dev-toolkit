@@ -331,16 +331,11 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
    (a mapping of port-number → service-slug). This scan happens once before Q2 is shown,
    avoiding repeated file I/O on each re-prompt cycle. (D-12)
 
-   1. Check whether `.devtools/` exists:
-      ```bash
-      test -d .devtools
-      ```
-      - If `.devtools/` does **not** exist (clean project, first install): set
-        `BOUND_PORTS={}` (empty) and skip straight to Q2. No user-visible message. (D-04)
-      - If `.devtools/` exists: continue to scan steps 2–3 below.
-
-   2. **Primary scan — compose files** (D-01, D-03): Read every compose file under
+   1. **Primary scan — compose files** (D-01, D-03): Read every compose file under
       `.devtools/` to extract host-side port numbers from `ports:` entries.
+      (`.devtools/` is always present at this point — Step 2 above creates it on first
+      install — but may contain no compose files yet; the scan simply returns empty
+      results and `BOUND_PORTS={}` with no user-visible message.) (D-04)
 
       ```bash
       find .devtools -name "*.compose.yml" -print0 | xargs -0 grep -h "127\.0\.0\.1:" 2>/dev/null
@@ -368,7 +363,7 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
       This also covers alias installs automatically, since their slugs appear as
       `.devtools/<service>-<alias>/` subdirectories. (D-13)
 
-   3. **Supplemental scan — .env files** (D-02): Scan `.devtools/*/.env` for
+   2. **Supplemental scan — .env files** (D-02): Scan `.devtools/*/.env` for
       `*_PORT=<number>` variables to catch any port declared in env but not yet reflected
       in a compose file (edge case).
 
@@ -380,7 +375,7 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
       service slug from the parent directory. Add to `BOUND_PORTS` only if the port is
       not already present (compose scan is primary; .env is supplemental). (D-02)
 
-   After steps 2–3, `BOUND_PORTS` contains every host-bound port number across all
+   After steps 1–2, `BOUND_PORTS` contains every host-bound port number across all
    installed services. Proceed to Q2.
 
 2. **Port?** `[default: <port from metadata>]` *(asked only if `ANSWERS[host_port]=true`)*
