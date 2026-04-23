@@ -31,7 +31,7 @@ See [`.planning/milestones/v1.0-ROADMAP.md`](.planning/milestones/v1.0-ROADMAP.m
 **Plans**: 1 plan
 
 Plans:
-- [ ] 08-01-PLAN.md — Host-port opt-in gate: Q&A question insertion, compose port removal, env var conditional skip, summary display
+- [x] 08-01-PLAN.md — Host-port opt-in gate: Q&A question insertion, compose port removal, env var conditional skip, summary display
 
 #### Phase 9: Port Collision Guard
 **Goal**: When a user requests host port binding, their chosen port is validated against all installed services before any file is written, and the skill re-prompts until a safe port is confirmed or the user backs out
@@ -43,7 +43,10 @@ Plans:
   3. Re-prompt loop continues until the user enters a non-conflicting port
   4. User can opt out of host binding at any point in the re-prompt loop; result is no `ports:` entry (same as Phase 8 no-port path)
   5. When a non-conflicting port is confirmed, the written compose file contains the correct `ports:` entry with that port
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 09-01-PLAN.md — Port scan sub-step + conflict-detection Q2 with 3-option escape menu
 
 ### Progress
 
