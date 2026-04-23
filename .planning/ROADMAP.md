@@ -15,7 +15,7 @@ See [`.planning/milestones/v1.0-ROADMAP.md`](.planning/milestones/v1.0-ROADMAP.m
 ### Phases
 
 - [ ] **Phase 8: Host Port Opt-In** — Skill asks whether to expose the service on a host port; compose output matches the user's choice exactly
-- [ ] **Phase 9: Port Collision Guard** — Chosen port validated against all already-installed services; re-prompt loop until conflict-free or user opts out
+- [x] **Phase 9: Port Collision Guard** — Chosen port validated against all already-installed services; re-prompt loop until conflict-free or user opts out (completed 2026-04-23)
 
 ### Phase Details
 
@@ -46,14 +46,14 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 09-01-PLAN.md — Port scan sub-step + conflict-detection Q2 with 3-option escape menu
+- [x] 09-01-PLAN.md — Port scan sub-step + conflict-detection Q2 with 3-option escape menu
 
 ### Progress
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 8. Host Port Opt-In | 0/? | Not started | - |
-| 9. Port Collision Guard | 0/? | Not started | - |
+| 9. Port Collision Guard | 1/1 | Complete   | 2026-04-23 |
 
 ---
 
