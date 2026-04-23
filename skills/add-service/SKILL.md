@@ -323,7 +323,65 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
    - Store answer as `ANSWERS[host_port]=true/false`.
    - If **No (default)**: skip the Port question (question 2 below) entirely — proceed directly
      to question 3 (Image version). Do NOT ask for a port number. (D-04)
-   - If **Yes**: continue to the Port question below. (D-06)
+   - If **Yes**: proceed to the Port Scan sub-step below, then ask Q2. (D-06, D-12)
+
+   **Port Scan sub-step** *(runs before Q2, only when `ANSWERS[host_port]=true`)*
+
+   Collect all host-bound ports from already-installed services into `BOUND_PORTS`
+   (a mapping of port-number → service-slug). This scan happens once before Q2 is shown,
+   avoiding repeated file I/O on each re-prompt cycle. (D-12)
+
+   1. Check whether `.devtools/` exists:
+      ```bash
+      test -d .devtools
+      ```
+      - If `.devtools/` does **not** exist (clean project, first install): set
+        `BOUND_PORTS={}` (empty) and skip straight to Q2. No user-visible message. (D-04)
+      - If `.devtools/` exists: continue to scan steps 2–3 below.
+
+   2. **Primary scan — compose files** (D-01, D-03): Read every compose file under
+      `.devtools/` to extract host-side port numbers from `ports:` entries.
+
+      ```bash
+      find .devtools -name "*.compose.yml" -print0 | xargs -0 grep -h "127\.0\.0\.1:" 2>/dev/null
+      ```
+
+      For each matching line, the format is one of:
+      - `"127.0.0.1:${ENV_VAR}:NNNN"` — extract the env-var's resolved value if available,
+        or note the env var name for .env cross-reference.
+      - `"127.0.0.1:NNNN:NNNN"` — extract the first NNNN as the host port.
+
+      More precisely: from each port line, capture the token between `127.0.0.1:` and the
+      second `:` (the container port). That token is either a literal port number or an
+      `${ENV_VAR}` reference.
+
+      To resolve `${ENV_VAR}` references, read the service's `.devtools/<slug>/.env` for
+      the variable value. The service slug is the immediate parent directory of the compose
+      file (e.g. `.devtools/redis/redis.compose.yml` → slug=`redis`).
+
+      Add each resolved port number to `BOUND_PORTS` with the service slug as the value.
+      If a port number appears more than once, keep the first occurrence. (D-07)
+
+      **Scope:** Scan ALL containers in every compose file — main service, UI companion
+      (redisinsight, pgadmin, phpmyadmin, mongo_express), and any monitoring exporter
+      containers that have host-mapped ports. Do not filter by container type. (D-03)
+      This also covers alias installs automatically, since their slugs appear as
+      `.devtools/<service>-<alias>/` subdirectories. (D-13)
+
+   3. **Supplemental scan — .env files** (D-02): Scan `.devtools/*/.env` for
+      `*_PORT=<number>` variables to catch any port declared in env but not yet reflected
+      in a compose file (edge case).
+
+      ```bash
+      find .devtools -maxdepth 2 -name ".env" -print0 | xargs -0 grep -hE "_PORT=[0-9]+" 2>/dev/null
+      ```
+
+      For each matched line `KEY=VALUE`, extract `VALUE` as a port number and the
+      service slug from the parent directory. Add to `BOUND_PORTS` only if the port is
+      not already present (compose scan is primary; .env is supplemental). (D-02)
+
+   After steps 2–3, `BOUND_PORTS` contains every host-bound port number across all
+   installed services. Proceed to Q2.
 
 2. **Port?** `[default: <port from metadata>]` *(asked only if `ANSWERS[host_port]=true`)*
    - Store answer as `ANSWERS[port]`.
