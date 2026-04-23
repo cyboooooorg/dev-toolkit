@@ -384,7 +384,39 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
    installed services. Proceed to Q2.
 
 2. **Port?** `[default: <port from metadata>]` *(asked only if `ANSWERS[host_port]=true`)*
-   - Store answer as `ANSWERS[port]`.
+
+   Ask for the port number. After the user enters a value, run the conflict check:
+
+   **Conflict check loop** (repeat after each "Try a different port" selection):
+
+   - If the entered port is **not in** `BOUND_PORTS`: set `ANSWERS[port]=<value>` and
+     proceed to Q3. ✓ No conflict.
+
+   - If the entered port **is in** `BOUND_PORTS`: (D-05, D-06, D-07)
+     - Identify the conflicting service: `CONFLICT_SERVICE = BOUND_PORTS[entered_port]`
+       (if multiple services map to the same port, use the first one found). (D-07)
+     - Find the next free port: scan `entered_port + 1`, `entered_port + 2`, … upward
+       until a value not present in `BOUND_PORTS` is found. Call it `NEXT_FREE`. (D-06)
+     - Display the conflict message:
+       ```
+       Port <entered_port> is already used by <CONFLICT_SERVICE> — try <NEXT_FREE>?
+       ```
+     - Show the 3-option escape menu and wait for user selection: (D-08)
+       ```
+       1. Try a different port
+       2. Use internal only (no host binding)
+       3. Cancel service install
+       ```
+     - **Option 1 — "Try a different port"**: Ask for a new port number (the conflict
+       message above is a hint only — the user may enter any value, not just `NEXT_FREE`).
+       (D-10) Re-run the conflict check with the new value. There is no retry limit —
+       the loop continues as long as the user keeps selecting option 1. (D-09)
+     - **Option 2 — "Use internal only (no host binding)"**: Set
+       `ANSWERS[host_port]=false` and clear `ANSWERS[port]` (no port stored). Continue
+       to Q3 (Image version). The install proceeds on the internal-only path — same
+       downstream behaviour as a Q1 "No" answer (Phase 8 D-04). (D-08)
+     - **Option 3 — "Cancel service install"**: Output `"Cancelled. Nothing written."`
+       and stop. (D-08)
 
 3. **Image version/tag?** `[default: <version from metadata>]`
    - Store answer as `ANSWERS[version]`.
