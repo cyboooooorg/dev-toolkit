@@ -355,9 +355,11 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
 
       That token is either a literal port number or an `${ENV_VAR}` reference.
 
-      To resolve `${ENV_VAR}` references, read the service's `.devtools/<slug>/.env` for
-      the variable value. The service slug is the immediate parent directory of the compose
-      file (e.g. `.devtools/redis/redis.compose.yml` → slug=`redis`).
+      To resolve `${ENV_VAR}` references: look up the variable name in
+      `.devtools/<slug>/.env` (the service slug is the immediate parent directory of the
+      compose file, e.g. `.devtools/redis/redis.compose.yml` → slug=`redis`). If the
+      `.env` file is absent or does not contain the variable, **skip that port and
+      continue** — the scan is best-effort for broken installs.
 
       Add each resolved port number to `BOUND_PORTS` with the service slug as the value.
       If a port number appears more than once, keep the first occurrence. (D-07)
@@ -369,8 +371,10 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
       `.devtools/<service>-<alias>/` subdirectories. (D-13)
 
    2. **Supplemental scan — .env files** (D-02): Scan `.devtools/*/.env` for
-      `*_PORT=<number>` variables to catch any port declared in env but not yet reflected
-      in a compose file (edge case).
+      `*_PORT=<number>` variables. This catches any host port declared in env but not yet
+      reflected in a compose file, and also resolves `${ENV_VAR}` host-port references
+      from step 1 that could not be resolved inline (e.g. because the compose file was
+      read before the `.env` file).
 
       ```bash
       find .devtools -maxdepth 2 -name ".env" -print0 | xargs -0 grep -hE "_PORT=[0-9]+" 2>/dev/null
@@ -378,7 +382,9 @@ question as `[default: X]`. Accept the user's answer or use the default if they 
 
       For each matched line `KEY=VALUE`, extract `VALUE` as a port number and the
       service slug from the parent directory. Add to `BOUND_PORTS` only if the port is
-      not already present (compose scan is primary; .env is supplemental). (D-02)
+      not already present (compose scan is primary; .env is supplemental). If the `.env`
+      file or expected key is absent, skip — this is a best-effort scan for broken
+      installs. (D-02)
 
    After steps 1–2, `BOUND_PORTS` contains every host-bound port number across all
    installed services. Proceed to Q2.
