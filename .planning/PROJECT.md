@@ -36,13 +36,13 @@ An AI can drop production-ready Docker service configs and Taskfiles into any pr
 - ✓ Multi-instance alias namespacing (service, volumes, env vars, Taskfile) — v1.0
 - ✓ Idempotent re-install: alias slug re-run exits cleanly with "already installed" — v1.0
 
-### Active (v1.1 targets)
+### Validated ✓ v1.1
 
-- [ ] Optional host port binding — ask user before mapping any service port to host (PORT-01, PORT-02)
-- [ ] Port collision detection — scan installed services for conflicting host ports before writing (PORT-03, PORT-04)
-- [ ] Port re-prompt loop — if chosen port is taken, ask for a different one (PORT-05)
+- ✓ Optional host port binding — ask user before mapping any service port to host (PORT-01, PORT-02) — v1.1
+- ✓ Port collision detection — scan installed services for conflicting host ports before writing (PORT-03, PORT-04) — v1.1
+- ✓ Port re-prompt loop — if chosen port is taken, ask for a different one with 3-option escape menu (PORT-05) — v1.1
 
-### Future (v2.0 targets)
+### Active (v2.0 targets)
 
 - [ ] Auto-detect existing stack (package.json, requirements.txt, etc.) and suggest relevant services
 - [ ] Service-specific CLI tasks: `redis:cli`, `mongo:shell`, `psql`
@@ -93,11 +93,18 @@ An AI can drop production-ready Docker service configs and Taskfiles into any pr
 
 ## Current State
 
+**v1.1 shipped 2026-04-23** — Port management milestone complete. All 5 PORT requirements (PORT-01–05) satisfied. Services now have opt-in host port binding with collision detection and a 3-option escape menu. v1.0 tech debt (BF-01, DOC-01, WR-01/WR-02) carried forward to v2.0.
+
+*Last updated: 2026-04-23 — v1.1 milestone archived*
+
+<details>
+<summary>Previous milestone: v1.1 Port Management (archived)</summary>
+
 **v1.1 started 2026-04-21** — Port management milestone in requirements/roadmap phase. v1.0 shipped with all 23 requirements satisfied; tech debt BF-01 (Grafana env_file) and DOC-01 (README layout) carried forward.
 
 *Last updated: 2026-04-21 — v1.1 milestone started*
 
-This document evolves at phase transitions and milestone boundaries.
+</details>
 
 **After each phase transition** (via `/gsd-transition`):
 1. Requirements invalidated? → Move to Out of Scope with reason
